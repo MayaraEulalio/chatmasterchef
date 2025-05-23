@@ -1,0 +1,221 @@
+const data = null;
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener('readystatechange', function () {
+	if (this.readyState === this.DONE) {
+		console.log(this.responseText);
+	}
+});
+
+xhr.open('GET', 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?tags=vegetarian%2Cdessert&number=1');
+xhr.setRequestHeader('x-rapidapi-key', '2d18ba089amsh84eb1689eba5b18p1fd92bjsn44ede4aaa135');
+xhr.setRequestHeader('x-rapidapi-host', 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com');
+
+xhr.send(date);
+  // Funções
+        function showMenu(day) {
+            selectedDay = day;
+            const menu = menus[day];
+            document.getElementById('menu-title').innerHTML = `<span>🍽️</span> ${menu.title}`;
+            document.getElementById('menu-content').innerHTML = menu.content + 
+                `<button onclick="generateShoppingList()" style="margin-top: 15px; padding: 10px 20px; background: var(--success); color: white; border: none; border-radius: 5px; cursor: pointer;">Gerar lista de compras para essas receitas:</button>`;
+            
+            // Atualiza o card ativo
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Efeito visual
+            document.getElementById('menu-display').classList.add('fade-in');
+            setTimeout(() => {
+                document.getElementById('menu-display').classList.remove('fade-in');
+            }, 500);
+        }
+
+
+function generateShoppingList(profileOnly = false) {
+    const profiles = {
+        solteiro: "1 pessoa",
+        casal: "2 pessoas",
+        familia: "4 pessoas",
+        mensal: "1 mês (economize tempo)"
+    };
+
+
+  let list = [
+];
+
+
+    // Adiciona itens específicos do dia (se aplicável)
+    if (!profileOnly && selectedDay && ingredients[selectedDay]) {
+        list.push("", `INGREDIENTES PARA ${menus[selectedDay].title.toUpperCase()} (${profiles[selectedProfile]}):`);
+        list = list.concat(ingredients[selectedDay]);
+    }
+
+    
+    switch(selectedProfile) {
+        case 'solteiro':
+        list.push("", "Lista de compras para Solteiro");
+        list.push(
+            "Pão integral (1 pacote pequeno)",
+            "Leite (1L)",
+            "Manteiga (100g)",
+            "Ovos (6 unidades)",
+            "Frutas variadas (1kg)",
+            "Iogurte natural (2 unidades)",
+            "Aveia em flocos (200g)",
+            "Mel (1 potinho pequeno)",
+            "Arroz (1kg)",
+            "Feijão (500g)",
+            "Macarrão (500g)",
+            "Molho pronto (1 sachê)",
+            "Carne moída (300g)",
+            "Filé de frango (3 unidades)",
+            "Batata (1kg)",
+            "Cebola (2 unidades)",
+            "Alho (1 cabeça)",
+            "Tomate (3 unidades)",
+            "Cenoura (2 unidades)",
+            "Abobrinha (1 unidade)",
+            "Brócolis (1 maço)",
+            "Azeite de oliva (100ml)",
+            "Miojo (3 unidades)",
+            "Bolachas (1 pacote)",
+            "Queijo branco (200g)",
+            "Castanhas ou sementes (100g)",
+            "Barra de cereal (3 unidades)",
+            "Suco natural (2 unidades)",
+            "Sal",
+            "Pimenta-do-reino",
+            "Orégano",
+            "Caldo de legumes (2 cubos)"
+        );
+        break;
+
+    case 'casal':
+        list.push("", "Lista de compras para casal (2 pessoas):");
+        list.push(
+            "Pão integral (1 pacote médio)",
+            "Leite (2L)",
+            "Manteiga (200g)",
+            "Ovos (12 unidades)",
+            "Frutas variadas (2kg)",
+            "Iogurte natural (4 unidades)",
+            "Aveia em flocos (300g)",
+            "Mel (1 pote pequeno)",
+            "Arroz (2kg)",
+            "Feijão (1kg)",
+            "Macarrão (1kg)",
+            "Molho pronto (2 sachês)",
+            "Carne moída (600g)",
+            "Filé de frango (6 unidades)",
+            "Batata (2kg)",
+            "Cebola (4 unidades)",
+            "Alho (2 cabeças)",
+            "Tomate (6 unidades)",
+            "Cenoura (4 unidades)",
+            "Abobrinha (2 unidades)",
+            "Brócolis (1 maço)",
+            "Couve-flor (1 unidade)",
+            "Azeite de oliva (250ml)",
+            "Miojo (6 unidades)",
+            "Bolachas (2 pacotes)",
+            "Queijo branco (300g)",
+            "Queijo muçarela (300g)",
+            "Presunto (300g)",
+            "Castanhas ou sementes (200g)",
+            "Barra de cereal (6 unidades)",
+            "Suco natural (4 unidades)",
+            "Farinha de trigo (1kg)",
+            "Fermento em pó (1 sachê)",
+            "Sal",
+            "Pimenta-do-reino",
+            "Orégano",
+            "Caldo de legumes (4 cubos)"
+        );
+        break;
+
+    case 'familia':
+        list.push("", "Lista de compras para família (4 pessoas):");
+        list.push(
+            "Pão integral (2 pacotes grandes)",
+            "Leite (4L)",
+            "Manteiga (400g)",
+            "Ovos (24 unidades)",
+            "Frutas variadas (4kg)",
+            "Iogurte natural (8 unidades)",
+            "Aveia em flocos (500g)",
+            "Mel (1 pote grande)",
+            "Arroz (4kg)",
+            "Feijão (2kg)",
+            "Macarrão (2kg)",
+            "Molho pronto (3 sachês)",
+            "Carne moída (1kg)",
+            "Filé de frango (1,5kg)",
+            "Carne bovina em pedaços (1kg)",
+            "Batata (4kg)",
+            "Cebola (6 unidades)",
+            "Alho (2 cabeças)",
+            "Tomate (10 unidades)",
+            "Cenoura (6 unidades)",
+            "Abobrinha (3 unidades)",
+            "Brócolis (2 maços)",
+            "Couve-flor (2 unidades)",
+            "Abacate (2 unidades)",
+            "Azeite de oliva (500ml)",
+            "Miojo (8 unidades)",
+            "Bolachas (3 pacotes)",
+            "Queijo muçarela (500g)",
+            "Presunto (500g)",
+            "Queijo minas ou branco (400g)",
+            "Castanhas ou sementes (300g)",
+            "Barra de cereal (8 unidades)",
+            "Suco natural (6 unidades)",
+            "Farinha de trigo (2kg)",
+            "Fermento em pó (1 sachê grande)",
+            "Sal (1kg)",
+            "Pimenta-do-reino (frasco pequeno)",
+            "Orégano (frasco)",
+            "Caldo de legumes (6 cubos)"
+        );
+        break;
+
+    case 'mensal':
+        list = [
+            "LISTA DE COMPRAS MENSAL - DICAS:",
+            "1. Planeje todas as refeições do mês",
+            "2. Compre itens não perecíveis em quantidade",
+            "3. Organize por categorias no supermercado",
+            "",
+            "ITENS BÁSICOS:",
+            "Arroz (5kg)",
+            "Feijão (2kg)",
+            "Massas variadas (3kg)",
+            "Óleo (2L)",
+            "Azeite (1L)",
+            "Sal (1kg)",
+            "Açúcar (2kg)",
+            "Farinha de trigo (2kg)",
+            "Café (500g)",
+            "Leite em pó (1kg)",
+            "",
+            "CARNES E PROTEÍNAS:",
+            "Frango (5kg - dividir em porções)",
+            "Carne moída (2kg)",
+            "Peixe (1kg)",
+            "Ovos (30 unidades)",
+            "Queijos variados (2kg)",
+            "",
+            "FRUTAS E VEGETAIS:",
+            "Compre semanalmente para manter frescor",
+            "Congele o que for possível"
+        ];
+        break;
+}
+
+    // Exibe no chat (certifique-se que addBotMessage existe)
+    addBotMessage(`Aqui está sua lista de compras para ${profiles[selectedProfile]}:<br><br>${list.join('<br>')}`);
+}
