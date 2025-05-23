@@ -1,0 +1,2880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatMasterchef - Seu Assistente Culinário com IA</title>
+    <style>
+        :root {
+            --primary:#FF6B6B;
+            --secondary: #4ECDC4;
+            --dark: #292F36;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --text: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        header h1 span {
+            margin-right: 15px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-card h3 span {
+            margin-right: 10px;
+        }
+        
+        .menu-days {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            margin-bottom: 30px;
+            scrollbar-width: thin;
+        }
+        
+        .menu-days::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .menu-days::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+        
+        .day-card {
+            min-width: 120px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .day-card:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .day-card.active {
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .shopping-profiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            color: var(--dark);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .profile-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .recipe-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-card:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .search-box {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-box button {
+            padding: 15px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #c0392b;
+        }
+        
+        .tip-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .tip-card h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip-card h3 span {
+            margin-right: 10px;
+        }
+        
+        .chat-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background: #e3f2fd;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot-message {
+            background: #f1f1f1;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .chat-input button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background: #c0392b;
+        }
+        
+      footer {
+    text-align: center;
+    padding: 2px;
+    color: var(--dark);
+    font-size: 0.9rem;
+    width: fit-content;
+    margin: 0 auto;
+}
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .recipe-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .chat-messages {
+                height: 200px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+           .shopping-list-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .shopping-list-btn {
+            padding: 13px 17px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .shopping-list-btn:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>
+                <span>🍳</span>
+      ChatMasterChef
+            </h1>
+            <p>Seu assistente culinário com IA. 
+                
+Receitas, cardápios semanais e listas de compras personalizadas</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <h3><span>✅</span> Receitas</h3>
+                <p>Doces, salgadas, veganas, low-carb, sem lactose e muito mais para todas as ocasiões.</p>
+            </div>
+            <div class="feature-card">
+                <h3><span>✅</span> Bebidas</h3>
+                <p>Sucos naturais, drinks, coquetéis, cafés especiais e bebidas saudáveis.</p>
+            </div>
+            <div class="feature-card">
+                <h3><span>✅</span> Cardápios</h3>
+                <p>Sugestões de menu para cada dia da semana com lista de compras integrada.</p>
+            </div>
+        </div>
+        
+        <h2>📅 Sugestões de Cardápio por Dia</h2>
+        <div class="menu-days">
+            <div class="day-card" onclick="showMenu('segunda')">Segunda</div>
+            <div class="day-card" onclick="showMenu('terca')">Terça</div>
+            <div class="day-card" onclick="showMenu('quarta')">Quarta</div>
+            <div class="day-card" onclick="showMenu('quinta')">Quinta</div>
+            <div class="day-card" onclick="showMenu('sexta')">Sexta</div>
+            <div class="day-card" onclick="showMenu('sabado')">Sábado</div>
+            <div class="day-card" onclick="showMenu('domingo')">Domingo</div>
+        </div>
+        
+        <div id="menu-display" class="feature-card fade-in">
+            <h3 id="menu-title"><span>🍽️</span> Cardápio de Segunda-feira</h3>
+            <div id="menu-content">
+                <p><strong>Café da Manhã:</strong> Vitamina de banana com aveia e mel</p>
+                <p><strong>Almoço:</strong> Filé de frango grelhado com arroz integral e brócolis no vapor</p>
+                <p><strong>Lanche:</strong> Iogurte natural com granola e frutas vermelhas</p>
+                <p><strong>Jantar:</strong> Omelete de espinafre com queijo branco e salada verde</p>
+                <button onclick="generateShoppingList()" style="margin-top: 15px; padding: 10px 20px; background: var(--success); color: white; border: none; border-radius: 5px; cursor: pointer;">Gerar Lista de Compras para essa receita</button>
+            </div>
+        </div>
+        <h2>🛒 Listas de Compras Automáticas</h2>
+    <button class="shopping-list-btn" onclick="selectProfile('solteiro', event)">Lista Solteiro</button>
+<button class="shopping-list-btn" onclick="selectProfile('casal', event)">Lista Casal(2 pessoas)</button>
+<button class="shopping-list-btn" onclick="selectProfile('familia', event)">Lista Família (4 pessoas)</button>
+<button class="shopping-list-btn" onclick="selectProfile('mensal', event)">Lista Mensal  (Economize + tempo)</button>
+
+        
+        <h2>🍽️ Categorias de Receitas</h2>
+        <div class="recipe-categories">
+            <div class="category-card" onclick="searchCategory('Saladas')">🥗 Saladas</div>
+            <div class="category-card" onclick="searchCategory('Carnes')">🍗 Carnes</div>
+            <div class="category-card" onclick="searchCategory('Massas')">🍝 Massas</div>
+            <div class="category-card" onclick="searchCategory('Pizzas')">🍕 Pizzas</div>
+            <div class="category-card" onclick="searchCategory('Asiáticas')">🍣 Asiáticas</div>
+            <div class="category-card" onclick="searchCategory('Veganas')">🥑 Veganas</div>
+            <div class="category-card" onclick="searchCategory('Fit')">🍛 Fit</div>
+            <div class="category-card" onclick="searchCategory('Sopas')">🍜 Sopas</div>
+            <div class="category-card" onclick="searchCategory('Lanches')">🍔 Lanches</div>
+            <div class="category-card" onclick="searchCategory('Doces')">🍰 Doces</div>
+        </div>
+        
+        <h2>🔍 Busca Rápida</h2>
+        <div class="search-box">
+            <input type="text" id="recipe-search" placeholder="Digite o que procura, ex: 'bolo de cenoura vegano', 'suco detox'..." onkeypress="handleKeyPress(event)">
+            <button onclick="searchRecipe()">Pesquisar</button>
+        </div>
+        
+        <div class="tip-card">
+            <h3><span>💡</span> Dica do Dia</h3>
+            <p id="daily-tip">Para deixar o arroz soltinho, refogue o alho e o arroz no óleo antes de colocar água quente. Use 2 xícaras de água para 1 de arroz e tampe a panela sem mexer!</p>
+        </div>
+        
+        <div class="chat-container">
+            <h2>🍳 Chat MasterChef IA</h2>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message fade-in">
+                    Olá! Sou o ChatMasterChef IA. Como posso te ajudar hoje? 😊<br><br>
+                    Posso sugerir receitas, cardápios semanais, listas de compras e dar dicas culinárias!
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Digite sua dúvida, ex: 'Receita de pudim sem lactose'..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 ChatMasterChef IA - Todos os direitos reservados</p>
+            <p>Desenvolvido com ❤️ para amantes da culinária</p>
+        </div>
+    </footer>
+
+    <script>
+   const API_URL= "https//:chatmasterchefonrender.chat;"
+        // Dados de exemplo
+        const menus = {
+            segunda: {
+                title: "Cardápio de Segunda-feira (Light)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Vitamina de banana com aveia e mel</p>
+                    <p><strong>Almoço:</strong> Filé de frango grelhado com arroz integral e brócolis no vapor</p>
+                    <p><strong>Lanche:</strong> Iogurte natural com granola e frutas vermelhas</p>
+                    <p><strong>Jantar:</strong> Omelete de espinafre com queijo branco e salada verde</p>
+                `
+            },
+            terca: {
+                title: "Cardápio de Terça-feira (Vegetariano)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Tapioca com queijo coalho e mamão</p>
+                    <p><strong>Almoço:</strong> Berinjela ao forno com molho de tomate caseiro e quinoa</p>
+                    <p><strong>Lanche:</strong> Smoothie de abacate com cacau em pó</p>
+                    <p><strong>Jantar:</strong> Risoto de cogumelos com aspargos</p>
+                `
+            },
+            quarta: {
+                title: "Cardápio de Quarta-feira (Low-Carb)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Ovos mexidos com abacate e sementes</p>
+                    <p><strong>Almoço:</strong> Salmão grelhado com purê de couve-flor</p>
+                    <p><strong>Lanche:</strong> Mix de castanhas e queijo minas</p>
+                    <p><strong>Jantar:</strong> Frango ao curry com legumes refogados</p>
+                `
+            },
+            quinta: {
+                title: "Cardápio de Quinta-feira (Rápido)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Pão integral com pasta de amendoim e banana</p>
+                    <p><strong>Almoço:</strong> Strogonoff de carne com arroz branco e batata palha</p>
+                    <p><strong>Lanche:</strong> Fruta da estação e chá verde</p>
+                    <p><strong>Jantar:</strong> Sanduíche natural de atum com salada</p>
+                `
+            },
+            sexta: {
+                title: "Cardápio de Sexta-feira (Italiano)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Cappuccino caseiro com pão de queijo</p>
+                    <p><strong>Almoço:</strong> Espaguete à carbonara com salada caprese</p>
+                    <p><strong>Lanche:</strong> Tiramisu (porção pequena)</p>
+                    <p><strong>Jantar:</strong> Pizza caseira de muçarela com rúcula</p>
+                `
+            },
+            sabado: {
+                title: "Cardápio de Sábado (Churrasco)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Pão na chapa com manteiga e café com leite</p>
+                    <p><strong>Almoço:</strong> Churrasco (picanha, linguiça, coração) com farofa e vinagrete</p>
+                    <p><strong>Lanche:</strong> Curau de milho verde</p>
+                    <p><strong>Jantar:</strong> Hambúrguer artesanal com fritas</p>
+                `
+            },
+            domingo: {
+                title: "Cardápio de Domingo (Família)",
+                content: `
+                    <p><strong>Café da Manhã:</strong> Panquecas americanas com mel e frutas</p>
+                    <p><strong>Almoço:</strong> Lasanha à bolonhesa com salada verde</p>
+                    <p><strong>Lanche:</strong> Bolo de chocolate com sorvete</p>
+                    <p><strong>Jantar:</strong> Sopa de legumes com pão de alho</p>
+                `
+            }
+        };
+
+        const tips = [
+            "Para deixar o arroz soltinho, refogue o alho e o arroz no óleo antes de colocar água quente. Use 2 xícaras de água para 1 de arroz e tampe a panela sem mexer!",
+            "Ao fazer ovos mexidos, adicione uma colher de leite ou creme de leite para deixá-los mais cremosos.",
+            "Para cortar cebola sem chorar, deixe-a na geladeira por 30 minutos antes de cortar ou use um ventilador para afastar os gases.",
+            "Na hora de grelhar carnes, espere a frigideira ficar bem quente antes de colocar o alimento para selar os sucos.",
+            "Para sobremesas mais leves, substitua o creme de leite por iogurte natural ou ricota batida.",
+            "Ao fazer massas, reserve uma xícara da água do cozimento antes de escorrer. Ela ajuda a dar liga aos molhos.",
+            "Para deixar o frango assado mais crocante, seque bem a pele com papel toalha antes de temperar e asse em temperatura alta."
+        ];
+
+        // Banco de receitas completo
+        const receitas = {
+            // dia a dia 
+
+            "Arroz": {
+    title: "Arroz Branco",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 1 xícara de arroz<br>
+        - 2 xícaras de água<br>
+        - 1 dente de alho picado<br>
+        - 1/2 cebola picada<br>
+        - 1 colher (sopa) de óleo<br>
+        - Sal a gosto<br>
+        <br>
+        <strong>Modo de Preparo:</strong><br>
+        Refogue o alho e a cebola no óleo.<br>
+        Adicione o arroz, mexa por 1 minuto.<br>
+        Junte a água e o sal, cozinhe em fogo médio até secar.<br>
+        Tampe, abaixe o fogo e cozinhe por mais 5 minutos.
+    `
+},
+"Feijão": {
+    title: "Feijão Simples",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 2 xícaras de feijão<br>
+        - 6 xícaras de água<br>
+        - 1 folha de louro<br>
+        - 1 dente de alho picado<br>
+        - 1/2 cebola picada<br>
+        - 1 colher (sopa) de óleo<br>
+        - Sal a gosto<br>
+        <br>
+        <strong>Modo de Preparo:</strong><br>
+        Deixe o feijão de molho por 8 horas.<br>
+        Cozinhe na pressão com o louro por 25 minutos.<br>
+        Refogue o alho e a cebola, junte ao feijão cozido.<br>
+        Tempere com sal e deixe engrossar o caldo.
+    `
+},
+"Purê de batata": {
+    title: "Purê de Batata",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 4 batatas médias<br>
+        - 1 colher (sopa) de manteiga<br>
+        - 1/2 xícara de leite<br>
+        - Sal a gosto<br>
+        <br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe as batatas até ficarem macias.<br>
+        Amasse ainda quentes e misture com a manteiga.<br>
+        Acrescente o leite aos poucos, mexendo até ficar cremoso.<br>
+        Ajuste o sal e sirva quente.
+    `
+},
+"Ovo frito": {
+    title: "Ovo Frito",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 1 ovo<br>
+        - 1 colher (chá) de óleo ou manteiga<br>
+        - Sal a gosto<br>
+        <br>
+        <strong>Modo de Preparo:</strong><br>
+        Aqueça o óleo ou manteiga na frigideira.<br>
+        Quebre o ovo com cuidado e frite até o ponto desejado.<br>
+        Tempere com sal e sirva.
+    `
+},
+
+         // 🍖 Carnes
+
+            "carne assada": {
+                title: "Carne Assada",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 peça de carne (alcatra, maminha ou fraldinha)<br>
+                    - 4 dentes de alho picados<br>
+                    - Sal e pimenta-do-reino a gosto<br>
+                    - 2 colheres de sopa de azeite<br>
+                    - 1 cebola em rodelas<br>
+                    - 1 xícara de vinho tinto seco (opcional)<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere a carne e deixe marinar por 1 hora.<br>
+                    Leve ao forno com azeite, cebola e vinho. Asse coberta por 1h30, tirando o papel para dourar.
+                `
+            },
+            "carne moída refogada": {
+                title: "Carne Moída Refogada",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 500g de carne moída<br>
+                    - 1 cebola picada<br>
+                    - 2 dentes de alho<br>
+                    - Sal, pimenta e cheiro-verde<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue cebola e alho, junte a carne e cozinhe até secar.<br>
+                    Tempere e finalize com cheiro-verde.
+                `
+            },
+            "carne de panela": {
+                title: "Carne de Panela",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1kg de acém ou músculo<br>
+                    - 1 cebola, 2 dentes de alho<br>
+                    - 2 tomates picados<br>
+                    - 1 cenoura em rodelas<br>
+                    - Água quente, sal, pimenta e cheiro-verde<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Doure a carne, adicione os temperos e legumes.<br>
+                    Cozinhe na pressão por 30-40 min. Finalize com cheiro-verde.
+                `
+            },
+            "picanha na churrasqueira": {
+                title: "Picanha na Churrasqueira",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 peça de picanha<br>
+                    - Sal grosso a gosto<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere com sal e asse na brasa até o ponto desejado.<br>
+                    Retire o excesso de sal e fatie para servir.
+                `
+            },
+            "bife à milanesa": {
+                title: "Bife à Milanesa",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 4 bifes<br>
+                    - Sal, pimenta, farinha de trigo, ovo e farinha de rosca<br>
+                    - Óleo para fritar<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere e empane os bifes.<br>
+                    Frite até dourar e escorra.
+                `
+            },
+
+            // 🍗 Frango
+            "frango assado crocante": {
+                title: "Frango Assado Crocante",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 frango em pedaços<br>
+                    - Alho, sal, limão, páprica e maionese<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere o frango e asse a 200°C por 1h10, virando na metade do tempo.
+                `
+            },
+            "estrogonofe de frango": {
+                title: "Estrogonofe de Frango",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 500g de peito de frango<br>
+                    - Cebola, ketchup, mostarda e creme de leite<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue o frango e junte os ingredientes. Finalize com creme de leite fora do fogo.
+                `
+            },
+            "frango à parmegiana": {
+                title: "Frango à Parmegiana",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 4 filés de frango<br>
+                    - Sal, ovo, farinha, molho de tomate e queijo<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Empane e frite os filés, depois asse com molho e queijo.
+                `
+            },
+            "frango xadrez": {
+                title: "Frango Xadrez",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 500g de frango em cubos<br>
+                    - Pimentões, cebola, shoyu e amido de milho<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue os ingredientes e engrosse o molho com amido e água.
+                `
+            },
+            "frango empanado na airfryer": {
+                title: "Frango Empanado na Airfryer",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 500g de tiras de frango<br>
+                    - Farinha de trigo, ovo e farinha panko<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere, empane e asse na airfryer a 200°C por 15-20 minutos.
+                `
+            },
+
+            // 🐟 Peixes e Frutos do Mar
+            "filé de peixe empanado": {
+                title: "Filé de Peixe Empanado",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Filés de peixe<br>
+                    - Sal, limão, ovo e farinha de rosca<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Tempere, empane e frite até dourar.
+                `
+            },
+            "moqueca de peixe": {
+                title: "Moqueca de Peixe",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Postas de peixe, pimentões, tomate, cebola<br>
+                    - Leite de coco, azeite de dendê e coentro<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Monte camadas dos ingredientes e cozinhe com leite de coco e dendê.
+                `
+            },
+            "salmão grelhado": {
+                title: "Salmão Grelhado",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Filés de salmão, sal, limão e azeite<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Grelhe os filés por 3 a 5 minutos de cada lado.
+                `
+            },
+            "camarão ao alho e óleo": {
+                title: "Camarão ao Alho e Óleo",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 500g de camarão limpo<br>
+                    - Alho picado, azeite, sal e cheiro-verde<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue o alho no azeite, adicione o camarão e frite até rosar.
+                `
+            },
+            "bolinho de bacalhau": {
+                title: "Bolinho de Bacalhau",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 300g de bacalhau dessalgado e desfiado<br>
+                    - 3 batatas cozidas amassadas<br>
+                    - Cebola, cheiro-verde e azeite<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture tudo, modele e frite até dourar.
+                `
+            },
+
+            // 🥦 Legumes e vegetais
+            "abobrinha recheada": {
+                title: "Abobrinha Recheada",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 2 abobrinhas<br>
+                    - 1 xícara de carne moída refogada<br>
+                    - Queijo ralado (opcional)<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Corte as abobrinhas ao meio, retire o miolo e recheie.<br>
+                    Polvilhe queijo e leve ao forno por 25 minutos.
+                `
+            },
+            "ratatouille": {
+                title: "Ratatouille",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Berinjela, abobrinha, pimentão, tomate e cebola<br>
+                    - Azeite, sal, alho e ervas<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Corte os legumes em rodelas e monte em camadas.<br>
+                    Regue com azeite e asse a 180°C por 40 minutos.
+                `
+            },
+            "legumes assados": {
+                title: "Legumes Assados no Forno",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Cenoura, batata, abobrinha, pimentão<br>
+                    - Azeite, ervas finas, sal e pimenta<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Corte os legumes e misture com azeite e temperos.<br>
+                    Asse a 200°C por 30-40 minutos.
+                `
+            },
+            "berinjela à parmegiana": {
+                title: "Berinjela à Parmegiana",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Berinjelas em rodelas<br>
+                    - Molho de tomate, queijo e farinha<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Empane e asse as rodelas. Monte camadas com molho e queijo, e asse por mais 20 minutos.
+                `
+            },
+            "sopa de legumes": {
+                title: "Sopa de Legumes",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Batata, cenoura, abobrinha, chuchu<br>
+                    - Caldo de legumes, alho, cebola e cheiro-verde<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue e cozinhe os legumes em água com caldo.<br>
+                    Pode bater no liquidificador se preferir cremosa.
+                `
+            },
+
+            // 🍰 Sobremesas e doces
+            "pudim": {
+                title: "Pudim de Leite Condensado",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 lata de leite condensado<br>
+                    - 2 latas de leite (medida da lata)<br>
+                    - 3 ovos<br>
+                    - 1 xícara de açúcar (caramelo)<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Faça o caramelo e espalhe na forma.<br>
+                    Bata os demais ingredientes e asse em banho-maria por 1 hora.
+                `
+            },
+            "mousse de maracujá": {
+                title: "Mousse de Maracujá",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 lata de leite condensado<br>
+                    - 1 lata de creme de leite<br>
+                    - 1 medida de suco concentrado de maracujá<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e leve à geladeira por 3 horas.
+                `
+            },
+            "brigadeiro e beijinho": {
+                title: "Brigadeiro e Beijinho",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 lata de leite condensado<br>
+                    - 1 colher de manteiga<br>
+                    - 2 colheres de chocolate (brigadeiro) ou coco (beijinho)<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Mexa até soltar do fundo da panela.<br>
+                    Modele os docinhos e passe no granulado ou coco.
+                `
+            },
+            "pavê de chocolate": {
+                title: "Pavê de Chocolate",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Biscoito maisena<br>
+                    - Creme de chocolate (leite, achocolatado, amido)<br>
+                    - Creme de leite e chocolate para cobertura<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Monte camadas de creme e biscoito, finalize com chocolate derretido.<br>
+                    Leve à geladeira por 3 horas.
+                `
+            },
+            "torta de limão": {
+                title: "Torta de Limão",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 pacote de biscoito maisena + manteiga (base)<br>
+                    - 1 lata de leite condensado<br>
+                    - Suco de 3 limões<br>
+                    - 1 caixinha de creme de leite<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Faça a base com biscoito e asse por 10 min.<br>
+                    Misture o creme e leve à geladeira por 3 horas.
+                `
+            },
+
+            // 🍞 Bolos e massas doces
+            "bolo de cenoura": {
+                title: "Bolo de Cenoura com Cobertura de Chocolate",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 3 cenouras, 3 ovos, 1 xícara de óleo<br>
+                    - 2 xícaras de açúcar, 2 de farinha, 1 colher de fermento<br>
+                    - Cobertura: chocolate, leite, manteiga, açúcar<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata os ingredientes no liquidificador, junte a farinha e fermento.<br>
+                    Asse por 40 min. Cubra com a calda quente.
+                `
+            },
+            "bolo de chocolate": {
+                title: "Bolo de Chocolate Fofinho",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 4 ovos, 1 xícara de óleo, 1 de leite<br>
+                    - 2 de açúcar, 1 de chocolate, 2 de farinha, fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo, adicione o fermento e leve ao forno por 40 minutos.
+                `
+            },
+            "bolo de fubá": {
+                title: "Bolo de Fubá",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 3 ovos, 2 xícaras de fubá<br>
+                    - 1 xícara de farinha, 1 de leite, 1 de óleo, açúcar e fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture bem e asse por cerca de 35 minutos.
+                `
+            },
+            "bolo de milho": {
+                title: "Bolo de Milho",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 lata de milho escorrido<br>
+                    - 3 ovos, 1 lata de leite, 1 de açúcar, 1 de fubá<br>
+                    - 1 colher de fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e asse por 40 minutos.
+                `
+            },
+            "cupcakes": {
+                title: "Cupcakes Simples",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 2 ovos, 1 xícara de açúcar<br>
+                    - 1/2 de óleo, 1 xícara de leite<br>
+                    - 2 de farinha, 1 colher de fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture tudo, coloque nas forminhas e asse por 20 minutos.
+                `
+            },
+
+            // 🥤 Sucos e bebidas naturais
+            "suco detox": {
+                title: "Suco Detox Energizante",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 folha de couve<br>
+                    - 1/2 maçã<br>
+                    - 1 pedaço pequeno de gengibre<br>
+                    - Suco de 1 limão<br>
+                    - 200ml de água de coco<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e coe se necessário.<br>
+                    Consuma imediatamente para aproveitar os nutrientes!
+                `
+            },
+            "suco de melancia": {
+                title: "Suco de Melancia com Hortelã",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 3 fatias de melancia sem sementes<br>
+                    - Folhas de hortelã<br>
+                    - Gelo e um pouco de água<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e sirva gelado.
+                `
+            },
+            "suco de abacaxi com gengibre": {
+                title: "Suco de Abacaxi com Gengibre",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 2 fatias de abacaxi<br>
+                    - 1 pedaço de gengibre<br>
+                    - 200ml de água<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e sirva com gelo.
+                `
+            },
+            "vitamina de banana": {
+                title: "Vitamina de Banana com Aveia",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 banana<br>
+                    - 200ml de leite<br>
+                    - 2 colheres de aveia<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador e sirva em seguida.
+                `
+            },
+            "smoothie de morango": {
+                title: "Smoothie de Morango",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 xícara de morangos congelados<br>
+                    - 1 banana<br>
+                    - 200ml de iogurte natural<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador até ficar cremoso.
+                `
+            },
+          
+            // 🍹 Drinks
+            "caipirinha": {
+                title: "Caipirinha Tradicional",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 limão<br>
+                    - 2 colheres de açúcar<br>
+                    - Gelo a gosto<br>
+                    - 50ml de cachaça<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Macere o limão com açúcar, adicione gelo e a cachaça. Misture bem.
+                `
+            },
+            "mojito": {
+                title: "Mojito",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Hortelã, 1 limão, 2 colheres de açúcar<br>
+                    - Gelo, água com gás, 50ml de rum<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Macere o limão e hortelã com açúcar, adicione rum, gelo e complete com água com gás.
+                `
+            },
+            "pina colada": {
+                title: "Piña Colada",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 50ml de rum<br>
+                    - 100ml de suco de abacaxi<br>
+                    - 50ml de leite de coco<br>
+                    - Gelo<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata tudo no liquidificador com gelo e sirva.
+                `
+            },
+            "aperol spritz": {
+                title: "Aperol Spritz",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 3 partes de espumante<br>
+                    - 2 partes de Aperol<br>
+                    - 1 parte de água com gás<br>
+                    - Laranja e gelo<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Monte na taça com gelo e uma fatia de laranja.
+                `
+            },
+            "drink refrescante sem álcool": {
+                title: "Drink Refrescante Sem Álcool",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Suco de 1 limão<br>
+                    - 150ml de água com gás<br>
+                    - Hortelã e gelo<br>
+                    - 1 colher de mel ou adoçante<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture tudo em um copo com gelo e sirva.
+                `
+            },
+
+            // 🌱 Veganas e vegetarianas
+            "lasanha de berinjela": {
+                title: "Lasanha de Berinjela",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Berinjela em fatias<br>
+                    - Molho de tomate<br>
+                    - Tofu ou queijo vegetal<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Monte camadas de berinjela grelhada, molho e tofu.<br>
+                    Asse por 30 minutos.
+                `
+            },
+            "hambúrguer de grão-de-bico": {
+                title: "Hambúrguer de Grão-de-Bico",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 xícara de grão-de-bico cozido<br>
+                    - Temperos, aveia e farinha para dar liga<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Amasse, modele e grelhe ou asse os hambúrgueres.
+                `
+            },
+            "estrogonofe de soja": {
+                title: "Estrogonofe de Soja",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Proteína de soja hidratada<br>
+                    - Cebola, alho, molho de tomate, creme vegetal<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Refogue tudo e finalize com creme vegetal.
+                `
+            },
+            "feijoada vegana": {
+                title: "Feijoada Vegana",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Feijão preto<br>
+                    - Legumes (cenoura, batata), tofu defumado<br>
+                    - Temperos<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Cozinhe o feijão e refogue com os legumes e tofu.
+                `
+            },
+            "torta de legumes sem ovos": {
+                title: "Torta de Legumes Sem Ovos",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Legumes variados<br>
+                    - Massa feita com farinha, água, azeite e fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture tudo e leve ao forno por 35 minutos.
+                `
+            },
+
+            // 🚫 Restrições alimentares
+            "bolo sem glúten e lactose": {
+                title: "Bolo sem Glúten e sem Lactose",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Farinha de arroz, açúcar, ovos<br>
+                    - Leite vegetal, óleo e fermento<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture tudo e asse normalmente.
+                `
+            },
+            "leite vegetal caseiro": {
+                title: "Leite Vegetal Caseiro",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 xícara de amêndoas ou aveia ou coco seco<br>
+                    - 3 xícaras de água<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Bata e coe com pano ou peneira fina.
+                `
+            },
+            "pão sem glúten": {
+                title: "Pão Sem Glúten",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - Farinha sem glúten, ovos, fermento, óleo e água morna<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture bem, coloque em forma untada e leve para assar por 40 minutos.
+                `
+            },
+            "panqueca sem ovo": {
+                title: "Panqueca Sem Ovo",
+                content: `
+                    <strong>Ingredientes:</strong><br>
+                    - 1 xícara de farinha<br>
+                    - 1 xícara de leite vegetal<br>
+                    - 1 colher de óleo<br>
+                    <br>
+                    <strong>Modo de Preparo:</strong><br>
+                    Misture bem e prepare as panquecas na frigideira antiaderente.
+                `
+            },
+            "receitas para aplv": {
+                title: "Receitas para APLV (Alergia à Proteína do Leite)",
+                content: `
+                    <strong>Dicas:</strong><br>
+                    - Substitua o leite por leite vegetal (aveia, coco, arroz)<br>
+                    - Evite manteiga: use óleo ou creme vegetal<br>
+                    - Opções: bolos sem leite, purê com azeite, arroz doce com leite de coco, etc.
+                `
+            },
+            "salada simples": {
+    title: "Salada Simples de Alface e Tomate",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - Folhas de alface lavadas<br>
+        - 2 tomates cortados em rodelas<br>
+        - 1/2 cebola fatiada<br>
+        - Azeite, sal e vinagre a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Em uma travessa, coloque as folhas de alface, distribua os tomates e a cebola por cima.<br>
+        Tempere com azeite, sal e vinagre na hora de servir.
+    `
+},
+"salada de maionese": {
+    title: "Salada de Maionese Tradicional",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 3 batatas cozidas em cubos<br>
+        - 2 cenouras cozidas em cubos<br>
+        - 1/2 xícara de ervilha (opcional)<br>
+        - 4 colheres de sopa de maionese<br>
+        - Sal a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Misture todos os ingredientes em uma tigela e leve à geladeira por pelo menos 30 minutos antes de servir.
+    `
+},
+"salada tropical": {
+    title: "Salada Tropical",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - Alface americana ou crespa<br>
+        - Rúcula<br>
+        - Manga cortada em cubos<br>
+        - Morango fatiado<br>
+        - Castanhas ou nozes picadas<br>
+        - Molho de iogurte ou azeite com limão<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Monte a salada com as folhas e frutas, salpique as castanhas e finalize com o molho de sua preferência.
+    `
+},
+"salada de grão de bico": {
+    title: "Salada de Grão-de-Bico",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 1 xícara de grão-de-bico cozido<br>
+        - 1/2 cebola roxa picada<br>
+        - 1 tomate picado<br>
+        - Cheiro-verde picado<br>
+        - Azeite, limão e sal a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Misture todos os ingredientes em uma tigela e sirva gelado.
+    `
+},
+"salada de macarrão": {
+    title: "Salada de Macarrão",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 2 xícaras de macarrão parafuso cozido<br>
+        - 1 cenoura ralada<br>
+        - 1/2 xícara de milho<br>
+        - Presunto e queijo picados (opcional)<br>
+        - Maionese a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Misture todos os ingredientes e leve à geladeira por pelo menos 30 minutos. Sirva gelado.
+    `
+},
+"macarrao à bolonhesa": {
+    title: "Macarrão à Bolonhesa",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 500g de macarrão (espaguete ou penne)<br>
+        - 300g de carne moída<br>
+        - 1 cebola picada<br>
+        - 2 dentes de alho picados<br>
+        - 1 lata de molho de tomate<br>
+        - Sal, pimenta e cheiro-verde a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe o macarrão conforme instruções da embalagem. Refogue a cebola e o alho no azeite, adicione a carne e cozinhe até dourar.<br>
+        Acrescente o molho de tomate, tempere e deixe apurar. Misture ao macarrão e sirva.
+    `
+},
+"macarrao alho e oleo": {
+    title: "Macarrão Alho e Óleo",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 250g de espaguete<br>
+        - 4 dentes de alho fatiados<br>
+        - 4 colheres de sopa de azeite de oliva<br>
+        - Sal e pimenta a gosto<br>
+        - Salsinha picada para finalizar<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe o macarrão e reserve. Doure o alho no azeite em fogo baixo, junte o macarrão cozido, misture bem e finalize com salsinha.
+    `
+},
+"macarrao com queijo": {
+    title: "Macarrão com Queijo (Mac and Cheese)",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 250g de macarrão tipo cotovelo<br>
+        - 2 colheres de sopa de manteiga<br>
+        - 2 colheres de sopa de farinha de trigo<br>
+        - 2 xícaras de leite<br>
+        - 1 e 1/2 xícara de queijo muçarela ou cheddar ralado<br>
+        - Sal e noz-moscada a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe o macarrão. Derreta a manteiga, adicione a farinha e mexa bem. Acrescente o leite aos poucos até engrossar.<br>
+        Adicione o queijo e tempere. Misture o molho ao macarrão e sirva quente.
+    `
+},
+"macarrao de forno": {
+    title: "Macarrão de Forno Cremoso",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 500g de macarrão (penne ou parafuso)<br>
+        - 300g de presunto e queijo picados<br>
+        - 1 lata de molho de tomate<br>
+        - 1 caixinha de creme de leite<br>
+        - Queijo ralado para gratinar<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe o macarrão e misture com o presunto, queijo, molho de tomate e creme de leite.<br>
+        Coloque em uma travessa, cubra com queijo ralado e leve ao forno para gratinar por 20 minutos.
+    `
+},
+"macarrao com legumes": {
+    title: "Macarrão com Legumes Salteados",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 250g de macarrão tipo penne ou parafuso<br>
+        - 1 cenoura em tiras finas<br>
+        - 1 abobrinha em tiras<br>
+        - 1/2 pimentão em tiras<br>
+        - 1 colher de sopa de shoyu (opcional)<br>
+        - Azeite, sal e pimenta a gosto<br><br>
+        <strong>Modo de Preparo:</strong><br>
+        Cozinhe o macarrão. Em uma frigideira, salteie os legumes no azeite até ficarem macios. Tempere e misture com o macarrão cozido.
+    `
+},
+
+
+
+                 "salada caesar": {
+            title: "Salada Caesar Clássica",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 1 alface romana<br>
+                - 1 xícara de croutons<br>
+                - 50g de queijo parmesão ralado<br>
+                - Molho Caesar (1 ovo, 1 dente de alho, 2 anchovas, 1 colher de mostarda, 1/2 xícara de azeite, suco de 1 limão)<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Lave e rasgue as folhas de alface<br>
+                2. Prepare o molho batendo todos os ingredientes no liquidificador<br>
+                3. Misture a alface com o molho, croutons e parmesão<br>
+                4. Sirva imediatamente
+            `
+        },
+        "salada de quinoa": {
+            title: "Salada de Quinoa com Vegetais",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 1 xícara de quinoa cozida<br>
+                - 1 pepino em cubos<br>
+                - 1 pimentão vermelho picado<br>
+                - 1/2 xícara de tomate cereja cortado ao meio<br>
+                - 1/4 de xícara de azeitonas<br>
+                - Suco de 1 limão<br>
+                - 2 colheres de azeite<br>
+                - Sal e pimenta a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Misture todos os ingredientes em uma tigela grande<br>
+                2. Tempere com limão, azeite, sal e pimenta<br>
+                3. Leve à geladeira por 30 minutos antes de servir
+            `
+        },
+                "salada grega": {
+            title: "Salada Grega Tradicional",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 2 pepinos em cubos<br>
+                - 3 tomates maduros em cubos<br>
+                - 1 cebola roxa em rodelas finas<br>
+                - 200g de queijo feta em cubos<br>
+                - 1/2 xícara de azeitonas pretas<br>
+                - 1 colher de sopa de orégano seco<br>
+                - 3 colheres de sopa de azeite de oliva<br>
+                - Suco de 1 limão<br>
+                - Sal a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Em uma tigela grande, misture suavemente todos os ingredientes<br>
+                2. Tempere com azeite, limão, orégano e sal<br>
+                3. Deixe descansar por 15 minutos antes de servir<br>
+                4. Sirva como entrada ou acompanhamento
+            `
+        },
+
+         "salada caprese": {
+            title: "Salada Caprese Clássica",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 3 tomates italianos maduros em rodelas<br>
+                - 250g de mussarela de búfala em rodelas<br>
+                - Folhas de manjericão fresco<br>
+                - 3 colheres de sopa de azeite de oliva extra virgem<br>
+                - 1 colher de sopa de vinagre balsâmico (opcional)<br>
+                - Sal grosso e pimenta-do-reino a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Em um prato, alterne rodelas de tomate e mussarela<br>
+                2. Salpique com folhas de manjericão fresco<br>
+                3. Regue com azeite de oliva e vinagre balsâmico<br>
+                4. Tempere com sal grosso e pimenta-do-reino moída na hora<br>
+                5. Sirva imediatamente como entrada ou acompanhamento
+            `
+        },
+
+        // 🍗 Carnes
+        "filé mignon": {
+            title: "Filé Mignon ao Molho Madeira",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 4 bifes de filé mignon (200g cada)<br>
+                - 1 colher de sopa de manteiga<br>
+                - 1 colher de sopa de azeite<br>
+                - 1/2 xícara de vinho madeira<br>
+                - 1/2 xícara de creme de leite fresco<br>
+                - Sal e pimenta a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Tempere as carnes com sal e pimenta<br>
+                2. Em uma frigideira quente, doure os bifes na manteiga e azeite (3 minutos cada lado para ponto médio)<br>
+                3. Retire as carnes e reserve<br>
+                4. Na mesma frigideira, adicione o vinho e reduza pela metade<br>
+                5. Acrescente o creme de leite e cozinhe por 2 minutos<br>
+                6. Volte os bifes à frigideira para aquecer e sirva com o molho
+            `
+        },
+
+        "frango assado": {
+    title: "Frango Assado Crocante",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 1 frango inteiro (ou pedaços)<br>
+        - 4 dentes de alho amassados<br>
+        - Suco de 1 limão<br>
+        - 2 colheres de sopa de azeite<br>
+        - 1 colher de sopa de páprica doce<br>
+        - 1 colher de chá de alecrim seco<br>
+        - 1 colher de chá de tomilho<br>
+        - Sal e pimenta a gosto<br><br>
+        
+        <strong>Modo de Preparo:</strong><br>
+        1. Tempere o frango com alho, limão, azeite, páprica, alecrim, tomilho, sal e pimenta. Deixe marinar por 2 horas (ou de um dia para o outro).<br>
+        2. Pré-aqueça o forno a 200°C.<br>
+        3. Coloque o frango em uma assadeira com a pele para cima.<br>
+        4. Asse por 1h15min (para frango inteiro) ou 40min (para pedaços), virando na metade do tempo.<br>
+        5. Dica: Para ficar mais crocante, aumente o forno para 220°C nos últimos 15 minutos.<br>
+        6. Sirva com arroz branco e salada.
+    `
+},
+"costela no bafo": {
+    title: "Costela no Bafo Suína",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 1 kg de costela suína em pedaços<br>
+        - 4 dentes de alho picados<br>
+        - 2 colheres de sopa de sal grosso<br>
+        - 1 colher de sopa de pimenta-do-reino moída<br>
+        - 1 colher de sopa de cominho em pó<br>
+        - 1 xícara de água<br>
+        - 2 folhas de louro<br><br>
+        
+        <strong>Modo de Preparo:</strong><br>
+        1. Tempere a costela com alho, sal, pimenta e cominho. Deixe descansar por 1 hora.<br>
+        2. Em uma panela de pressão, coloque a costela, a água e o louro.<br>
+        3. Tampe e cozinhe em fogo baixo por **1h30min** (se for panela comum, use 2h30min).<br>
+        4. Desligue e deixe sair a pressão naturalmente.<br>
+        5. Abra a panela e retire a costela (o caldo pode ser usado para arroz ou molho).<br>
+        6. Dica: Para dourar, leve ao forno a 200°C por 15 minutos ou grelhe rapidamente.
+    `
+},
+"peixe grelhado": {
+    title: "Peixe Grelhado Perfeito",
+    content: `
+        <strong>Ingredientes:</strong><br>
+        - 4 filés de salmão ou tilápia (com pele)<br>
+        - Suco de 1 limão<br>
+        - 2 colheres de sopa de azeite<br>
+        - 1 colher de chá de páprica defumada<br>
+        - Sal e pimenta a gosto<br>
+        - 1 pitada de açúcar (para caramelizar)<br><br>
+        
+        <strong>Modo de Preparo:</strong><br>
+        1. Tempere os filés com limão, azeite, páprica, sal, pimenta e açúcar. Deixe por 15 minutos.<br>
+        2. Aqueça uma frigideira antiaderente em fogo médio-alto.<br>
+        3. Coloque os filés **com a pele para baixo** e deixe por **4-5 minutos** sem mexer (até soltar naturalmente).<br>
+        4. Vire e grelhe o outro lado por **3 minutos** (para peixes mais finos, reduza o tempo).<br>
+        5. Sirva com molho de ervas (misture iogurte natural, endro, sal e alho).
+    `
+},
+
+        // 🍝 Massas
+        " espaguete a carbonara": {
+            title: "Espaguete à Carbonara",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 400g de espaguete<br>
+                - 200g de bacon em cubos<br>
+                - 3 ovos<br>
+                - 1 xícara de queijo parmesão ralado<br>
+                - Pimenta-do-reino moída na hora<br>
+                - Sal a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Cozinhe o macarrão al dente em água bem salgada<br>
+                2. Frite o bacon até ficar crocante<br>
+                3. Em uma tigela, bata os ovos com o queijo parmesão e pimenta<br>
+                4. Escorra o macarrão, misture com o bacon ainda quente<br>
+                5. Adicione a mistura de ovos rapidamente, mexendo bem (o calor do macarrão cozinha os ovos)<br>
+                6. Sirva imediatamente com mais parmesão por cima
+            `
+        },
+ "lasanha": {
+    title: "Lasanha à Bolonhesa",
+    content: `
+        <strong>Ingredientes (para 8 porções):</strong><br>
+        <strong>Molho Bolonhesa:</strong><br>
+        - 500g de carne moída<br>
+        - 1 cebola picada<br>
+        - 2 dentes de alho picados<br>
+        - 2 latas de molho de tomate<br>
+        - 1 cenoura ralada<br>
+        - 1 colher de sopa de orégano<br>
+        - Sal e pimenta a gosto<br>
+        <strong>Montagem:</strong><br>
+        - 1 pacote de massa para lasanha (pré-cozida)<br>
+        - 500g de mussarela fatiada<br>
+        - 100g de queijo parmesão ralado<br>
+        - 1 xícara de requeijão<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Refogue a cebola e alho, acrescente a carne e doure<br>
+        2. Adicione o molho de tomate, cenoura e temperos. Cozinhe por 20min<br>
+        3. Em uma forma, alterne camadas: molho, massa, queijo mussarela<br>
+        4. Repita até acabar os ingredientes, terminando com molho<br>
+        5. Finalize com requeijão e parmesão<br>
+        6. Asse em forno pré-aquecido a 180°C por 30min<br>
+        7. Deixe descansar 10min antes de servir
+    `
+},
+"penne ao molho pesto": {
+    title: "Penne ao Molho Pesto Caseiro",
+    content: `
+        <strong>Ingredientes (4 porções):</strong><br>
+        <strong>Molho Pesto:</strong><br>
+        - 2 xícaras de manjericão fresco<br>
+        - 1/2 xícara de queijo parmesão ralado<br>
+        - 1/3 xícara de pinoli (ou nozes)<br>
+        - 2 dentes de alho<br>
+        - 1/2 xícara de azeite de oliva<br>
+        - Sal a gosto<br>
+        <strong>Massa:</strong><br>
+        - 400g de penne<br>
+        - 1/2 xícara de tomate cereja cortado ao meio<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Bata todos os ingredientes do pesto no processador até obter uma pasta<br>
+        2. Cozinhe a massa al dente e reserve 1 xícara da água do cozimento<br>
+        3. Em uma frigideira grande, misture a massa com o molho pesto<br>
+        4. Adicione um pouco da água reservada se necessário para ficar cremoso<br>
+        5. Acrescente os tomates cereja e misture delicadamente<br>
+        6. Sirva com parmesão ralado por cima
+    `
+},
+"nhoque": {
+    title: "Nhoque de Batata Caseiro",
+    content: `
+        <strong>Ingredientes (4 porções):</strong><br>
+        - 1kg de batata inglesa<br>
+        - 1 1/2 xícara de farinha de trigo<br>
+        - 1 ovo<br>
+        - Sal e noz-moscada a gosto<br>
+        - Molho de tomate e queijo ralado para servir<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Cozinhe as batatas inteiras com casca até ficarem macias<br>
+        2. Descasque e passe ainda quentes pelo espremedor<br>
+        3. Acrescente o ovo, sal, noz-moscada e vá adicionando a farinha até obter uma massa homogênea<br>
+        4. Faça rolinhos com a massa e corte em pedaços de 2cm<br>
+        5. Cozinhe em água fervente com sal - quando subirem à superfície, estão prontos<br>
+        6. Escorra e sirve com seu molho preferido<br>
+        7. Dica tradicional: sirve no "domingo do nhoque" com um pouco de queijo parmesão
+    `
+},
+
+
+        // 🍕 Pizzas
+        "pizza margherita": {
+            title: "Pizza Margherita Caseira",
+            content: `
+                <strong>Ingredientes (massa):</strong><br>
+                - 500g de farinha de trigo<br>
+                - 1 colher de chá de sal<br>
+                - 1 colher de chá de açúcar<br>
+                - 1 tablete de fermento biológico fresco<br>
+                - 1 xícara de água morna<br>
+                - 2 colheres de azeite<br><br>
+                <strong>Recheio:</strong><br>
+                - 1 xícara de molho de tomate<br>
+                - 300g de muçarela de búfala<br>
+                - Folhas de manjericão fresco<br>
+                - Azeite para regar<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Misture os ingredientes da massa e sove por 10 minutos<br>
+                2. Deixe descansar por 1 hora até dobrar de volume<br>
+                3. Abra a massa em forma redonda e espalhe o molho<br>
+                4. Adicione a muçarela em rodelas<br>
+                5. Asse em forno bem quente (250°C) por 12-15 minutos<br>
+                6. Finalize com manjericão fresco e azeite
+            `
+        },
+        "pizza calabresa": {
+    title: "Pizza de Calabresa Tradicional",
+    content: `
+        <strong>Ingredientes (1 pizza grande):</strong><br>
+        <strong>Massa:</strong><br>
+        - 3 xícaras de farinha de trigo<br>
+        - 1 xícara de água morna<br>
+        - 1 colher de sopa de açúcar<br>
+        - 1 colher de chá de sal<br>
+        - 1 tablete de fermento biológico (15g)<br>
+        - 3 colheres de sopa de azeite<br>
+        <strong>Recheio:</strong><br>
+        - 1 xícara de molho de tomate<br>
+        - 200g de calabresa fatiada<br>
+        - 1 cebola em rodelas<br>
+        - 300g de mussarela ralada<br>
+        - Orégano a gosto<br>
+        - Azeite para regar<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Dissolva o fermento na água com açúcar e espere 10min até espumar<br>
+        2. Misture a farinha, sal, azeite e a mistura de fermento até formar uma massa lisa<br>
+        3. Deixe descansar por 1h até dobrar de volume<br>
+        4. Abra a massa em forma redonda (espessura média)<br>
+        5. Espalhe o molho de tomate, depois a mussarela<br>
+        6. Distribua a calabresa e as rodelas de cebola<br>
+        7. Asse em forno bem quente (250°C) por 15-20min<br>
+        8. Finalize com orégano e um fio de azeite
+    `
+},
+"pizza portuguesa": {
+    title: "Pizza Portuguesa Clássica",
+    content: `
+        <strong>Ingredientes (1 pizza grande):</strong><br>
+        <strong>Massa:</strong> (igual à receita anterior)<br>
+        <strong>Recheio:</strong><br>
+        - 1 xícara de molho de tomate<br>
+        - 300g de mussarela ralada<br>
+        - 100g de presunto em cubos<br>
+        - 100g de ervilha cozida<br>
+        - 2 ovos cozidos em rodelas<br>
+        - 1 cebola em rodelas<br>
+        - 1 tomate em rodelas<br>
+        - Azeitonas pretas a gosto<br>
+        - Orégano e azeite para finalizar<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Prepare a massa como na receita anterior<br>
+        2. Espalhe o molho de tomate e a mussarela<br>
+        3. Distribua uniformemente o presunto, ervilha, ovos, cebola e tomate<br>
+        4. Decore com azeitonas<br>
+        5. Asse em forno a 250°C por 15-20min até a massa ficar dourada<br>
+        6. Finalize com orégano e azeite
+    `
+},
+"pizza vegana": {
+    title: "Pizza Vegana Colorida",
+    content: `
+        <strong>Ingredientes (1 pizza grande):</strong><br>
+        <strong>Massa:</strong> (igual à receita anterior, pode usar óleo vegetal no lugar do azeite)<br>
+        <strong>Molho:</strong><br>
+        - 1 xícara de molho de tomate temperado<br>
+        <strong>Recheio:</strong><br>
+        - 1/2 abobrinha em rodelas finas<br>
+        - 1/2 berinjela em cubos assados<br>
+        - 1 pimentão amarelo em tiras<br>
+        - 1 xícara de cogumelos fatiados<br>
+        - 1/2 xícara de tofu defumado em cubos (opcional)<br>
+        - Azeitonas pretas<br>
+        <strong>Queijo Vegano:</strong><br>
+        - 1 xícara de castanha de caju hidratada<br>
+        - 1/2 xícara de água<br>
+        - 2 colheres de sopa de fermento nutricional<br>
+        - 1 dente de alho<br>
+        - Sal e limão a gosto<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Prepare a massa como nas receitas anteriores<br>
+        2. Para o queijo: bata todos os ingredientes no liquidificador até ficar cremoso<br>
+        3. Espalhe o molho de tomate na massa<br>
+        4. Distribua os legumes e o tofu<br>
+        5. Regue com o "queijo" vegano<br>
+        6. Asse em forno a 220°C por 18-20min<br>
+        7. Finalize com folhas de manjericão fresco
+    `
+},
+
+        // 🍣 Asiáticas
+        "yakissoba": {
+            title: "Yakissoba de Frango",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 300g de macarrão para yakissoba<br>
+                - 300g de peito de frango em tiras<br>
+                - 2 colheres de shoyu<br>
+                - 1 cenoura em rodelas finas<br>
+                - 1/2 repolho cortado em tiras<br>
+                - 1 pimentão em tiras<br>
+                - 2 dentes de alho picados<br>
+                - 1 colher de óleo de gergelim<br>
+                - 1 colher de molho de ostras<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Cozinhe o macarrão conforme instruções da embalagem<br>
+                2. Refogue o alho no óleo, adicione o frango e doure<br>
+                3. Acrescente os legumes e refogue rapidamente<br>
+                4. Adicione o macarrão escorrido e os molhos<br>
+                5. Misture bem e sirva quente
+            `
+        },
+        "sushi": {
+    title: "Sushi Maki de Salmão",
+    content: `
+        <strong>Ingredientes (para 4 pessoas):</strong><br>
+        <strong>Arroz para sushi:</strong><br>
+        - 2 xícaras de arroz japonês<br>
+        - 2 xícaras de água<br>
+        - 1/4 xícara de vinagre de arroz<br>
+        - 2 colheres de sopa de açúcar<br>
+        - 1 colher de chá de sal<br>
+        <strong>Recheio:</strong><br>
+        - 200g de salmão fresco em tiras<br>
+        - 1 pepino japonês em tiras<br>
+        - 1 abacate em fatias<br>
+        - 4 folhas de nori (alga marinha)<br>
+        - Wasabi e gengibre em conserva (opcional)<br>
+        - Molho shoyu para servir<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Lave o arroz até a água sair limpa. Cozinhe com a água por 20min<br>
+        2. Misture vinagre, açúcar e sal. Adicione ao arroz ainda quente e misture delicadamente<br>
+        3. Espalhe o arroz sobre uma folha de nori em esteira de bambu<br>
+        4. Coloque o salmão, pepino e abacate no centro<br>
+        5. Enrole com cuidado usando a esteira<br>
+        6. Corte em 8 pedaços com faca molhada<br>
+        7. Sirva com shoyu, wasabi e gengibre<br>
+        <strong>Dica:</strong> Para versão vegetariana, substitua o salmão por manga ou kani kama
+    `
+},
+"pad thai": {
+    title: "Pad Thai de Frango Tradicional",
+    content: `
+        <strong>Ingredientes (2 porções):</strong><br>
+        - 200g de macarrão de arroz (talharim tailandês)<br>
+        - 200g de peito de frango em tiras<br>
+        - 2 ovos<br>
+        - 1 xícara de broto de feijão<br>
+        - 2 cebolinhas cortadas<br>
+        - 3 dentes de alho picados<br>
+        - 2 colheres de sopa de molho de peixe<br>
+        - 2 colheres de sopa de açúcar mascavo<br>
+        - 2 colheres de sopa de suco de limão<br>
+        - 1 colher de sopa de molho de tamarindo<br>
+        - 1/4 xícara de amendoim torrado moído<br>
+        - 2 colheres de óleo<br>
+        - Coentro e limão para servir<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Hidrate o macarrão em água quente por 10min e escorra<br>
+        2. Misture molho de peixe, açúcar, limão e tamarindo para fazer o molho<br>
+        3. Refogue o alho no óleo, acrescente o frango e doure<br>
+        4. Empurre para o lado e frite os ovos mexidos<br>
+        5. Adicione o macarrão, molho e broto de feijão. Misture bem<br>
+        6. Cozinhe por 3-4 minutos até o macarrão ficar macio<br>
+        7. Finalize com amendoim, cebolinha e coentro<br>
+        8. Sirva com limão e pimenta seca opcional<br>
+        <strong>Tempo:</strong> 30min
+    `
+},
+"ramen": {
+    title: "Ramen de Frango Caseiro",
+    content: `
+        <strong>Ingredientes (2 porções):</strong><br>
+        <strong>Caldo:</strong><br>
+        - 1 litro de água<br>
+        - 2 sobrecoxas de frango<br>
+        - 1 pedaço de gengibre (3cm)<br>
+        - 2 dentes de alho<br>
+        - 2 colheres de sopa de shoyu<br>
+        - 1 colher de chá de óleo de gergelim<br>
+        <strong>Montagem:</strong><br>
+        - 200g de macarrão ramen (ou espaguete fino)<br>
+        - 1 ovo cozido (6min) cortado ao meio<br>
+        - 100g de peito de frango cozido e fatiado<br>
+        - 1 xícara de broto de feijão<br>
+        - 1 cebolinha picada<br>
+        - Pimenta dedo-de-moça em rodelas (opcional)<br>
+        - Alga nori para decorar<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Cozinhe o frango com água, gengibre e alho por 40min para fazer o caldo<br>
+        2. Retire o frango, desfie a carne e reserve<br>
+        3. Adicione shoyu e óleo de gergelim ao caldo coado<br>
+        4. Cozinhe o macarrão separadamente<br>
+        5. Monte: coloque o macarrão na tigela, cubra com caldo<br>
+        6. Arrume os toppings (frango, ovo, brotos, cebolinha)<br>
+        7. Decore com alga nori e pimenta<br>
+        <strong>Dica:</strong> Para versão vegana, substitua o frango por shitake e use caldo de legumes
+    `
+},
+
+        // 🥑 Veganas
+        "hambúrguer de grão-de-bico": {
+            title: "Hambúrguer Vegano de Grão-de-Bico",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 2 xícaras de grão-de-bico cozido<br>
+                - 1/2 xícara de aveia em flocos<br>
+                - 1 cebola picada<br>
+                - 2 dentes de alho picados<br>
+                - 1 colher de sopa de azeite<br>
+                - 1 colher de chá de cominho<br>
+                - 1 colher de chá de páprica doce<br>
+                - Sal e pimenta a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Amasse o grão-de-bico com um garfo ou processador<br>
+                2. Refogue a cebola e alho no azeite<br>
+                3. Misture todos os ingredientes até obter uma massa homogênea<br>
+                4. Modele os hambúrgueres e leve à geladeira por 30 minutos<br>
+                5. Grelhe em frigideira antiaderente por 4 minutos de cada lado<br>
+                6. Sirve em pão com seus acompanhamentos favoritos
+            `
+        },
+        "strogonoff de cogumelos": {
+    title: "Strogonoff Vegano de Cogumelos",
+    content: `
+        <strong>Ingredientes (4 porções):</strong><br>
+        - 500g de cogumelos Paris ou Shimeji fatiados<br>
+        - 1 cebola picada<br>
+        - 2 dentes de alho picados<br>
+        - 1 colher de sopa de extrato de tomate<br>
+        - 1 xícara de creme de leite de castanha (ou vegetal)<br>
+        - 1 colher de sopa de mostarda<br>
+        - 1 colher de chá de páprica doce<br>
+        - 2 colheres de sopa de shoyu<br>
+        - 1 folha de louro<br>
+        - Sal e pimenta a gosto<br>
+        - Salsinha picada para decorar<br>
+        - Batata palha para acompanhar<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Em uma panela, refogue a cebola e alho no azeite<br>
+        2. Acrescente os cogumelos e doure por 5 minutos<br>
+        3. Adicione o extrato de tomate, shoyu, mostarda e páprica<br>
+        4. Refogue por 2 minutos e adicione o creme vegetal<br>
+        5. Cozinhe em fogo baixo por 10 minutos até engrossar<br>
+        6. Ajuste os temperos e retire o louro<br>
+        7. Sirva com arroz branco, batata palha e salsinha<br>
+        <strong>Tempo:</strong> 30min | <strong>Dificuldade:</strong> Fácil
+    `
+},
+"feijoada vegetariana": {
+    title: "Feijoada Vegetariana Completa",
+    content: `
+        <strong>Ingredientes (6 porções):</strong><br>
+        - 2 xícaras de feijão preto<br>
+        - 1 xícara de proteína de soja texturizada (PTS)<br>
+        - 1 abobrinha em cubos<br>
+        - 1 berinjela em cubos<br>
+        - 2 batatas doces em cubos<br>
+        - 2 folhas de louro<br>
+        - 2 dentes de alho picados<br>
+        - 1 cebola picada<br>
+        - 1 pimentão vermelho em cubos<br>
+        - 2 colheres de sopa de azeite de dendê<br>
+        - 1 colher de sopa de cominho em pó<br>
+        - Sal e pimenta a gosto<br>
+        - Couve picada para acompanhar<br>
+        - Farofa e laranja para servir<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Cozinhe o feijão na panela de pressão por 30min com louro<br>
+        2. Hidrate a PTS em água quente por 10min e escorra<br>
+        3. Em uma panela grande, refogue alho e cebola no azeite<br>
+        4. Adicione os legumes e refogue por 5 minutos<br>
+        5. Acrescente o feijão cozido, PTS, dendê e cominho<br>
+        6. Cozinhe por 15min em fogo médio até engrossar<br>
+        7. Ajuste os temperos e sirva com couve refogada, farofa e laranja<br>
+        <strong>Dica:</strong> Para versão mais tradicional, adicione tofu defumado
+    `
+},
+"ratatouille": {
+    title: "Ratatouille à Provençal",
+    content: `
+        <strong>Ingredientes (4 porções):</strong><br>
+        - 1 berinjela em rodelas finas<br>
+        - 2 abobrinhas em rodelas finas<br>
+        - 2 tomates em rodelas finas<br>
+        - 1 pimentão vermelho em tiras<br>
+        - 1 cebola em rodelas<br>
+        - 3 dentes de alho picados<br>
+        - 1 lata de tomate pelado<br>
+        - 1 colher de sopa de tomilho fresco<br>
+        - 1 folha de louro<br>
+        - 1/2 xícara de azeite de oliva<br>
+        - Sal e pimenta a gosto<br>
+        - Manjericão fresco para decorar<br><br>
+
+        <strong>Modo de Preparo:</strong><br>
+        1. Pré-aqueça o forno a 180°C<br>
+        2. Em uma assadeira, espalhe o tomate pelado como base<br>
+        3. Arrume alternadamente as rodelas de berinjela, abobrinha e tomate<br>
+        4. Intercale com as tiras de pimentão e cebola<br>
+        5. Tempere com alho, tomilho, louro, sal e pimenta<br>
+        6. Regue generosamente com azeite<br>
+        7. Cubra com papel alumínio e asse por 40min<br>
+        8. Retire o papel e deixe dourar por mais 15min<br>
+        9. Finalize com manjericão fresco<br>
+        <strong>Dica:</strong> Sirva com pão rústico ou arroz basmati
+    `
+},
+
+        // 🍛 Fit
+        "frango com batata doce": {
+            title: "Frango Grelhado com Purê de Batata Doce",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 2 peitos de frango<br>
+                - 2 batatas doces médias<br>
+                - 1 colher de chá de azeite<br>
+                - 1 dente de alho picado<br>
+                - 1 colher de chá de alecrim seco<br>
+                - Sal e pimenta a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Tempere o frango com alho, alecrim, sal e pimenta<br>
+                2. Cozinhe as batatas doces até ficarem macias<br>
+                3. Amasse as batatas com um pouco de água do cozimento<br>
+                4. Grelhe o frango em frigideira antiaderente com azeite (6-8 minutos cada lado)<br>
+                5. Sirva o frango com o purê de batata doce
+            `
+        },
+
+        // 🍜 Sopas
+        "sopa de abóbora": {
+            title: "Sopa Cremosa de Abóbora",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                - 500g de abóbora cabotiá em cubos<br>
+                - 1 cebola picada<br>
+                - 2 dentes de alho picados<br>
+                - 1 colher de sopa de azeite<br>
+                - 1 litro de caldo de legumes<br>
+                - 1/2 xícara de creme de leite (opcional)<br>
+                - Noz-moscada, sal e pimenta a gosto<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Refogue a cebola e alho no azeite<br>
+                2. Adicione a abóbora e o caldo de legumes<br>
+                3. Cozinhe até a abóbora ficar macia (cerca de 20 minutos)<br>
+                4. Bata no liquidificador até obter um creme liso<br>
+                5. Volte à panela, ajuste os temperos e adicione o creme de leite se desejar<br>
+                6. Sirva quente com croutons ou sementes torradas
+            `
+        },
+        
+    "sopa de legumes": {
+        title: "Sopa de Legumes Nutritiva",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 2 cenouras médias picadas<br>
+            - 2 batatas médias picadas<br>
+            - 1 abobrinha picada<br>
+            - 1 xícara de chuchu picado<br>
+            - 1 cebola média picada<br>
+            - 2 dentes de alho amassados<br>
+            - 1 litro de água ou caldo de legumes<br>
+            - 2 colheres de sopa de azeite<br>
+            - Sal e pimenta a gosto<br>
+            - Cheiro-verde picado a gosto<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Em uma panela grande, aqueça o azeite e refogue a cebola e o alho até dourarem<br>
+            2. Adicione os legumes picados e refogue por 2 minutos<br>
+            3. Acrescente a água ou caldo de legumes e tempere com sal e pimenta<br>
+            4. Cozinhe em fogo médio por cerca de 20 minutos ou até os legumes ficarem macios<br>
+            5. Se desejar, amasse levemente alguns legumes com um garfo para engrossar a sopa<br>
+            6. Finalize com cheiro-verde picado e sirva quente
+        `
+    },
+    "caldinho de feijão": {
+        title: "Caldinho de Feijão Cremoso",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 2 xícaras de feijão cozido (com o caldo)<br>
+            - 1 linguiça calabresa picada (opcional)<br>
+            - 1 cebola pequena picada<br>
+            - 2 dentes de alho picados<br>
+            - 1 folha de louro<br>
+            - 1 colher de sopa de azeite<br>
+            - 1 tablete de caldo de bacon ou legumes<br>
+            - 1/2 xícara de água quente<br>
+            - Pimenta-do-reino a gosto<br>
+            - Coentro picado para decorar<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Em uma panela, aqueça o azeite e doure a linguiça (se usar)<br>
+            2. Adicione a cebola e o alho, refogando até ficarem dourados<br>
+            3. Acrescente o feijão com seu caldo e a folha de louro<br>
+            4. Dissolva o tablete de caldo na água quente e adicione à panela<br>
+            5. Cozinhe em fogo baixo por 15 minutos, mexendo ocasionalmente<br>
+            6. Retire a folha de louro e bata levemente com um mixer para engrossar<br>
+            7. Ajuste o tempero e sirva quente, decorado com coentro
+        `
+    },
+    "canja": {
+        title: "Canja de Galinha Reconfortante",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 1 peito de frango com osso<br>
+            - 1/2 xícara de arroz lavado<br>
+            - 1 cenoura média picada<br>
+            - 1 batata média picada<br>
+            - 1 cebola média picada<br>
+            - 2 dentes de alho picados<br>
+            - 1 colher de sopa de azeite<br>
+            - 1 litro de água<br>
+            - Sal e pimenta a gosto<br>
+            - Salsinha e cebolinha picadas<br>
+            - 1 pitada de açafrão (opcional para cor)<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Em uma panela, aqueça o azeite e doure a cebola e o alho<br>
+            2. Adicione o peito de frango e deixe dourar levemente<br>
+            3. Acrescente a água e deixe cozinhar por 20 minutos<br>
+            4. Retire o frango, desfie e reserve<br>
+            5. Na mesma água, adicione o arroz, a cenoura e a batata<br>
+            6. Cozinhe até os legumes e o arroz ficarem macios<br>
+            7. Volte o frango desfiado à panela<br>
+            8. Tempere com sal, pimenta e açafrão<br>
+            9. Finalize com salsinha e cebolinha e sirva bem quente
+        `
+    },
+
+
+        // 🍔 Lanches
+        "hambúrguer artesanal": {
+            title: "Hambúrguer Artesanal com Queijo",
+            content: `
+                <strong>Ingredientes (4 hambúrgueres):</strong><br>
+                - 500g de carne moída (patinho ou alcatra)<br>
+                - 1 ovo<br>
+                - 1/2 xícara de farinha de rosca<br>
+                - 1 colher de chá de mostarda<br>
+                - 1 colher de chá de molho inglês<br>
+                - 1 dente de alho picado<br>
+                - Sal e pimenta a gosto<br>
+                - 4 fatias de queijo cheddar<br>
+                - 4 pães de hambúrguer<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Misture todos os ingredientes (exceto queijo e pão)<br>
+                2. Modele os hambúrgueres com cerca de 2cm de espessura<br>
+                3. Grelhe em frigideira ou churrasqueira (4-5 minutos cada lado)<br>
+                4. Adicione o queijo no último minuto para derreter<br>
+                5. Monte o lanche com os acompanhamentos de sua preferência
+            `
+        },
+
+        
+    "sanduíche natural": {
+        title: "Sanduíche Natural Light",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 2 fatias de pão integral ou de forma light<br>
+            - 2 colheres de sopa de requeijão light<br>
+            - 1/2 cenoura ralada<br>
+            - 1/2 beterraba ralada<br>
+            - 1/2 tomate em rodelas finas<br>
+            - Folhas de alface a gosto<br>
+            - 2 fatias de peito de peru<br>
+            - 1 fatia de queijo branco<br>
+            - Orégano a gosto<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Passe o requeijão nas duas fatias de pão<br>
+            2. Monte o sanduíche colocando primeiro as folhas de alface<br>
+            3. Adicione as fatias de peito de peru e queijo<br>
+            4. Distribua a cenoura e beterraba raladas<br>
+            5. Coloque as rodelas de tomate e tempere com orégano<br>
+            6. Feche o sanduíche e corte na diagonal<br>
+            7. Sirva fresco (pode embrulhar em papel filme e levar na lancheira)
+        `
+    },
+    "wrap de frango": {
+        title: "Wrap de Frango Cremoso",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 1 tortilla de trigo integral grande<br>
+            - 1/2 peito de frango grelhado e desfiado<br>
+            - 2 colheres de sopa de cream cheese light<br>
+            - 1/4 de pimentão colorido em tiras<br>
+            - 1/2 cenoura ralada<br>
+            - Folhas de espinafre ou rúcula<br>
+            - 1 colher de chá de azeite<br>
+            - Tempero a gosto (sal, pimenta, páprica doce)<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Tempere o frango desfiado com os temperos de sua preferência<br>
+            2. Espalhe o cream cheese sobre toda a tortilla<br>
+            3. Distribua as folhas verdes no centro da tortilla<br>
+            4. Coloque o frango desfiado, as tiras de pimentão e a cenoura ralada<br>
+            5. Regue com um fio de azeite<br>
+            6. Dobre as laterais e enrole como um burrito<br>
+            7. Leve à frigideira por 1 minuto de cada lado para dourar levemente<br>
+            8. Corte ao meio na diagonal e sirva
+        `
+    },
+    "cachorro-quente": {
+        title: "Cachorro-Quente Tradicional",
+        content: `
+            <strong>Ingredientes (para 2 unidades):</strong><br>
+            - 2 pães para hot dog<br>
+            - 2 salsichas tipo viena<br>
+            - 1/2 xícara de molho de tomate caseiro<br>
+            - 1/4 de cebola picada<br>
+            - 1 dente de alho picado<br>
+            - 1 colher de sopa de óleo<br>
+            - 1 colher de chá de mostarda<br>
+            - 1 colher de chá de ketchup<br>
+            - 1 pitada de pimenta-do-reino<br>
+            - Batata palha a gosto<br>
+            - Milho verde cozido a gosto (opcional)<br>
+            - Queijo ralado a gosto<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Cozinhe as salsichas em água fervente por 5 minutos<br>
+            2. Em uma panela, refogue a cebola e alho no óleo<br>
+            3. Adicione o molho de tomate, mostarda, ketchup e pimenta<br>
+            4. Cozinhe por 5 minutos em fogo baixo<br>
+            5. Abra os pães e coloque uma salsicha em cada<br>
+            6. Cubra com o molho quente<br>
+            7. Complete com batata palha, milho e queijo ralado<br>
+            8. Sirva imediatamente com guardanapo
+        `
+    },
+
+
+        // 🍰 Doces
+        "pudim de leite": {
+            title: "Pudim de Leite Condensado",
+            content: `
+                <strong>Ingredientes:</strong><br>
+                <strong>Calda:</strong><br>
+                - 1 xícara de açúcar<br>
+                - 1/4 de xícara de água<br><br>
+                <strong>Pudim:</strong><br>
+                - 1 lata de leite condensado<br>
+                - 2 latas de leite (medida da lata de leite condensado)<br>
+                - 3 ovos inteiros<br><br>
+                <strong>Modo de Preparo:</strong><br>
+                1. Derreta o açúcar em fogo médio até formar um caramelo dourado<br>
+                2. Adicione a água com cuidado (pode espirrar) e mexa até dissolver<br>
+                3. Despeje na forma de pudim e reserve<br>
+                4. Bata todos os ingredientes do pudim no liquidificador<br>
+                5. Despeje sobre o caramelo na forma<br>
+                6. Asse em banho-maria em forno pré-aquecido a 180°C por cerca de 1 hora<br>
+                7. Deixe esfriar completamente antes de desenformar
+            `
+        },
+        
+    "bolo de chocolate": {
+        title: "Bolo de Chocolate Fofinho",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 3 ovos<br>
+            - 1½ xícara de açúcar<br>
+            - 2 xícaras de farinha de trigo<br>
+            - 1 xícara de leite<br>
+            - ½ xícara de óleo<br>
+            - 1 xícara de chocolate em pó 50% cacau<br>
+            - 1 colher de sopa de fermento em pó<br>
+            - 1 pitada de sal<br>
+            <strong>Calda:</strong><br>
+            - 1 lata de leite condensado<br>
+            - 1 colher de sopa de manteiga<br>
+            - 3 colheres de sopa de chocolate em pó<br>
+            - ½ xícara de leite<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Bata os ovos com o açúcar até obter um creme claro e fofo<br>
+            2. Adicione o óleo e o leite, batendo bem<br>
+            3. Incorpore a farinha, o chocolate em pó e o sal, mexendo delicadamente<br>
+            4. Por último, adicione o fermento<br>
+            5. Asse em forma untada por 40 minutos em forno a 180°C<br>
+            <strong>Para a calda:</strong><br>
+            1. Misture todos os ingredientes em uma panela<br>
+            2. Leve ao fogo baixo até engrossar<br>
+            3. Despeje sobre o bolo ainda morno
+        `
+    },
+    "mousse de maracujá": {
+        title: "Mousse de Maracujá Light",
+        content: `
+            <strong>Ingredientes:</strong><br>
+            - 1 lata de leite condensado<br>
+            - 1 lata de creme de leite<br>
+            - 1 xícara de suco de maracujá puro (cerca de 4 maracujás)<br>
+            - 1 envelope de gelatina incolor sem sabor (12g)<br>
+            - ½ xícara de água<br>
+            - Polpa e sementes de 1 maracujá para decorar<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Hidrate a gelatina na água fria por 5 minutos, depois dissolva em banho-maria<br>
+            2. No liquidificador, bata o leite condensado, creme de leite e suco de maracujá<br>
+            3. Adicione a gelatina dissolvida e bata por mais 1 minuto<br>
+            4. Despeje em taças individuais e leve à geladeira por 4 horas<br>
+            5. Decore com a polpa fresca e sementes de maracujá antes de servir
+        `
+    },
+    "cheesecake": {
+        title: "Cheesecake de Frutas Vermelhas",
+        content: `
+            <strong>Base:</strong><br>
+            - 200g de biscoito tipo maisena<br>
+            - 100g de manteiga derretida<br>
+            <strong>Recheio:</strong><br>
+            - 500g de cream cheese<br>
+            - 1 lata de leite condensado<br>
+            - 1 envelope de gelatina sem sabor<br>
+            - ½ xícara de suco de limão<br>
+            <strong>Cobertura:</strong><br>
+            - 1 xícara de frutas vermelhas frescas<br>
+            - ½ xícara de geleia de frutas vermelhas<br><br>
+            <strong>Modo de Preparo:</strong><br>
+            1. Triture os biscoitos e misture com a manteiga derretida<br>
+            2. Forre uma forma de fundo removível e leve à geladeira<br>
+            3. Bata o cream cheese com o leite condensado até ficar homogêneo<br>
+            4. Dissolva a gelatina no suco de limão aquecido e incorpore ao creme<br>
+            5. Despeje sobre a base de biscoito e leve à geladeira por 6 horas<br>
+            6. Decore com as frutas vermelhas e pincele com a geleia derretida<br>
+            7. Sirva gelado
+        `
+    },
+    
+
+
+            // 🎉 Cardápios especiais
+            "jantar romântico": {
+                title: "Jantar Romântico Completo",
+                content: `
+                    <strong>Menu:</strong><br>
+                    - Entrada: Bruschettas<br>
+                    - Prato principal: Risoto de cogumelos<br>
+                    - Sobremesa: Fondue de chocolate com frutas<br>
+                    - Bebida: Vinho tinto
+                `
+            },
+            "almoço de domingo": {
+                title: "Almoço de Domingo em Família",
+                content: `
+                    <strong>Menu:</strong><br>
+                    - Arroz, feijão<br>
+                    - Carne assada ou frango<br>
+                    - Farofa, salada<br>
+                    - Sobremesa: Pudim ou gelatina
+                `
+            },
+            "ceia de natal": {
+                title: "Ceia de Natal Simples",
+                content: `
+                    <strong>Menu:</strong><br>
+                    - Arroz com passas<br>
+                    - Peru assado ou frango recheado<br>
+                    - Salpicão<br>
+                    - Rabanada ou pavê de sobremesa
+                `
+            },
+            "festa junina": {
+                title: "Festa Junina (Comidas Típicas)",
+                content: `
+                    <strong>Comidas:</strong><br>
+                    - Milho cozido, canjica, pamonha<br>
+                    - Bolo de fubá, curau<br>
+                    - Pipoca, quentão, arroz doce
+                `
+            },
+            "aniversário infantil": {
+                title: "Cardápio de Aniversário Infantil",
+                content: `
+                    <strong>Comidas:</strong><br>
+                    - Mini sanduíches, cachorro-quente<br>
+                    - Salgadinhos fritos e assados<br>
+                    - Docinhos (brigadeiro, beijinho)<br>
+                    - Bolo temático e sucos naturais
+                `
+            }
+        };
+
+
+      
+     
+
+        // Funções
+        function showMenu(day) {
+            selectedDay = day;
+            const menu = menus[day];
+            document.getElementById('menu-title').innerHTML = `<span>🍽️</span> ${menu.title}`;
+            document.getElementById('menu-content').innerHTML = menu.content + 
+                `<button onclick="generateShoppingList()" style="margin-top: 15px; padding: 10px 20px; background: var(--success); color: white; border: none; border-radius: 5px; cursor: pointer;">Gerar lista de compras para essas receitas:</button>`;
+            
+            // Atualiza o card ativo
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Efeito visual
+            document.getElementById('menu-display').classList.add('fade-in');
+            setTimeout(() => {
+                document.getElementById('menu-display').classList.remove('fade-in');
+            }, 500);
+        }
+
+
+    const ingredients = {
+        segunda: [
+            "Banana (6 unidades)",
+            "Aveia em flocos (200g)",
+            "Mel (1 pote pequeno)",
+            "Filé de frango (2 peças)",
+            "Arroz integral (1kg)",
+            "Brócolis (1 maço)",
+            "Iogurte natural (1 pote)",
+            "Granola (200g)",
+            "Frutas vermelhas (1 bandeja)",
+            "Ovos (6 unidades)",
+            "Espinafre (1 maço)",
+            "Queijo branco (200g)",
+            "Alface (1 pé)",
+            "Tomate (2 unidades)"
+        ],
+        terca: [
+            "Tapioca (500g)",
+            "Queijo coalho (300g)",
+            "Mamão (1 unidade)",
+            "Berinjela (2 unidades)",
+            "Molho de tomate (1 lata)",
+            "Quinoa (200g)",
+            "Abacate (1 unidade)",
+            "Cacau em pó (100g)",
+            "Cogumelos (300g)",
+            "Aspargos (1 maço)",
+            "Arroz arbóreo (500g)",
+            "Vinho branco (1 garrafa)"
+        ],
+        quarta: [
+            "Ovos (12 unidades)",
+            "Abacate (2 unidades)",
+            "Sementes (girassol, chia, linhaça)",
+            "Salmão (1 filé)",
+            "Couve-flor (1 unidade)",
+            "Castanhas (200g)",
+            "Queijo minas (200g)",
+            "Peito de frango (2 unidades)",
+            "Curry em pó (1 pote)",
+            "Abobrinha (2 unidades)",
+            "Cenoura (3 unidades)"
+        ],
+    quinta: [
+    "Ovos (12 unidades)",
+    "Abacate (2 unidades)",
+    "Sementes (girassol, chia, linhaça)",
+    "Salmão (1 filé)",
+    "Couve-flor (1 unidade)",
+    "Castanhas (200g)",
+    "Queijo minas (200g)",
+    "Peito de frango (2 unidades)",
+    "Curry em pó (1 pote)",
+    "Abobrinha (2 unidades)",
+    "Cenoura (3 unidades)",
+    "Azeite de oliva (1 frasco)",
+    "Sal (a gosto)",
+    "Pimenta-do-reino (a gosto)",
+    "Alho (2 dentes)",
+    "Cebola (1 unidade)"
+],
+ sexta:[
+    "Café solúvel (1 pote)",
+    "Leite em pó (200g)",
+    "Açúcar (a gosto)",
+    "Polvilho doce (500g)",
+    "Queijo parmesão ralado (200g)",
+    "Ovos (6 unidades)",
+    "Espaguete (500g)",
+    "Bacon (200g)",
+    "Ovos (4 gemas)",
+    "Queijo parmesão (100g)",
+    "Tomates-cereja (1 bandeja)",
+    "Muçarela de búfala (150g)",
+    "Manjericão fresco (1 maço)",
+    "Café forte (1 xícara)",
+    "Biscoito champanhe (1 pacote)",
+    "Creme de leite fresco (200ml)",
+    "Mascarpone (200g)",
+    "Cacau em pó (1 colher de sopa)",
+    "Farinha de trigo (500g)",
+    "Fermento biológico seco (1 sache)",
+    "Molho de tomate (1 sachê)",
+    "Muçarela ralada (300g)",
+    "Rúcula (1 maço)",
+    "Azeite de oliva (1 frasco)",
+    "Sal (a gosto)",
+    "Pimenta-do-reino (a gosto)",
+    "Alho (2 dentes)"
+],
+ sábado:[
+    "Pão francês (4 unidades)",
+    "Manteiga (200g)",
+    "Café em pó (100g)",
+    "Leite (1 litro)",
+    "Picanha (500g)",
+    "Linguiça toscana (400g)",
+    "Coração de frango (300g)",
+    "Farinha de mandioca (250g)",
+    "Cebola (2 unidades)",
+    "Tomate (3 unidades)",
+    "Pimentão verde (1 unidade)",
+    "Vinagre (1/2 xícara)",
+    "Milho verde (4 espigas ou 2 latas)",
+    "Leite (500ml)",
+    "Açúcar (1 xícara)",
+    "Amido de milho (2 colheres de sopa)",
+    "Carne moída (500g)",
+    "Pão de hambúrguer (4 unidades)",
+    "Muçarela (4 fatias)",
+    "Alface (1 maço)",
+    "Tomate (2 unidades)",
+    "Batata para fritar (500g)",
+    "Óleo para fritura (1 litro)",
+    "Sal (a gosto)",
+    "Pimenta-do-reino (a gosto)",
+    "Alho (2 dentes)",
+    "Mostarda e ketchup (opcional)"
+],
+domingo:[
+    "Farinha de trigo (2 xícaras)",
+    "Leite (500ml)",
+    "Ovos (3 unidades)",
+    "Fermento em pó (1 colher de sopa)",
+    "Mel (1 pote)",
+    "Frutas variadas (banana, morango, uva – 500g)",
+    "Massa para lasanha (1 pacote)",
+    "Carne moída (500g)",
+    "Molho de tomate (1 sachê)",
+    "Cebola (2 unidades)",
+    "Alho (3 dentes)",
+    "Queijo muçarela (300g)",
+    "Presunto (300g)",
+    "Alface (1 maço)",
+    "Rúcula (1 maço)",
+    "Tomate (2 unidades)",
+    "Chocolate em pó (1 xícara)",
+    "Açúcar (1 xícara)",
+    "Farinha de trigo (1 e 1/2 xícara)",
+    "Ovos (2 unidades)",
+    "Fermento em pó (1 colher de sopa)",
+    "Leite (200ml)",
+    "Manteiga (100g)",
+    "Sorvete de creme (1 pote)",
+    "Batata (2 unidades)",
+    "Cenoura (2 unidades)",
+    "Chuchu (1 unidade)",
+    "Abobrinha (1 unidade)",
+    "Caldo de legumes (1 cubo)",
+    "Pão francês (2 unidades)",
+    "Manteiga (100g)",
+    "Salsinha (a gosto)",
+    "Sal (a gosto)",
+    "Pimenta-do-reino (a gosto)"
+]
+};
+
+
+  // Variáveis globais (certifique-se de que existam)
+let selectedProfile = 'solteiro'; // Valor padrão
+let selectedDay = null; // Ou o valor inicial adequado
+
+
+function selectProfile(profile, event) {
+    selectedProfile = profile;
+    
+    // Atualiza o botão ativo
+    document.querySelectorAll('.shopping-list-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Gera a lista imediatamente ao selecionar o perfil
+    generateShoppingList();
+}
+
+function generateShoppingList(profileOnly = false) {
+    const profiles = {
+        solteiro: "1 pessoa",
+        casal: "2 pessoas",
+        familia: "4 pessoas",
+        mensal: "1 mês (economize tempo)"
+    };
+
+    // SEMPRE comece com a lista básica
+  let list = [
+];
+
+
+    // Adiciona itens específicos do dia (se aplicável)
+    if (!profileOnly && selectedDay && ingredients[selectedDay]) {
+        list.push("", `INGREDIENTES PARA ${menus[selectedDay].title.toUpperCase()} (${profiles[selectedProfile]}):`);
+        list = list.concat(ingredients[selectedDay]);
+    }
+
+    // Adiciona itens por perfil (AGORA FUNCIONANDO CORRETAMENTE)
+    switch(selectedProfile) {
+        case 'solteiro':
+        list.push("", "Lista de compras para Solteiro");
+        list.push(
+            "Pão integral (1 pacote pequeno)",
+            "Leite (1L)",
+            "Manteiga (100g)",
+            "Ovos (6 unidades)",
+            "Frutas variadas (1kg)",
+            "Iogurte natural (2 unidades)",
+            "Aveia em flocos (200g)",
+            "Mel (1 potinho pequeno)",
+            "Arroz (1kg)",
+            "Feijão (500g)",
+            "Macarrão (500g)",
+            "Molho pronto (1 sachê)",
+            "Carne moída (300g)",
+            "Filé de frango (3 unidades)",
+            "Batata (1kg)",
+            "Cebola (2 unidades)",
+            "Alho (1 cabeça)",
+            "Tomate (3 unidades)",
+            "Cenoura (2 unidades)",
+            "Abobrinha (1 unidade)",
+            "Brócolis (1 maço)",
+            "Azeite de oliva (100ml)",
+            "Miojo (3 unidades)",
+            "Bolachas (1 pacote)",
+            "Queijo branco (200g)",
+            "Castanhas ou sementes (100g)",
+            "Barra de cereal (3 unidades)",
+            "Suco natural (2 unidades)",
+            "Sal",
+            "Pimenta-do-reino",
+            "Orégano",
+            "Caldo de legumes (2 cubos)"
+        );
+        break;
+
+    case 'casal':
+        list.push("", "Lista de compras para casal (2 pessoas):");
+        list.push(
+            "Pão integral (1 pacote médio)",
+            "Leite (2L)",
+            "Manteiga (200g)",
+            "Ovos (12 unidades)",
+            "Frutas variadas (2kg)",
+            "Iogurte natural (4 unidades)",
+            "Aveia em flocos (300g)",
+            "Mel (1 pote pequeno)",
+            "Arroz (2kg)",
+            "Feijão (1kg)",
+            "Macarrão (1kg)",
+            "Molho pronto (2 sachês)",
+            "Carne moída (600g)",
+            "Filé de frango (6 unidades)",
+            "Batata (2kg)",
+            "Cebola (4 unidades)",
+            "Alho (2 cabeças)",
+            "Tomate (6 unidades)",
+            "Cenoura (4 unidades)",
+            "Abobrinha (2 unidades)",
+            "Brócolis (1 maço)",
+            "Couve-flor (1 unidade)",
+            "Azeite de oliva (250ml)",
+            "Miojo (6 unidades)",
+            "Bolachas (2 pacotes)",
+            "Queijo branco (300g)",
+            "Queijo muçarela (300g)",
+            "Presunto (300g)",
+            "Castanhas ou sementes (200g)",
+            "Barra de cereal (6 unidades)",
+            "Suco natural (4 unidades)",
+            "Farinha de trigo (1kg)",
+            "Fermento em pó (1 sachê)",
+            "Sal",
+            "Pimenta-do-reino",
+            "Orégano",
+            "Caldo de legumes (4 cubos)"
+        );
+        break;
+
+    case 'familia':
+        list.push("", "Lista de compras para família (4 pessoas):");
+        list.push(
+            "Pão integral (2 pacotes grandes)",
+            "Leite (4L)",
+            "Manteiga (400g)",
+            "Ovos (24 unidades)",
+            "Frutas variadas (4kg)",
+            "Iogurte natural (8 unidades)",
+            "Aveia em flocos (500g)",
+            "Mel (1 pote grande)",
+            "Arroz (4kg)",
+            "Feijão (2kg)",
+            "Macarrão (2kg)",
+            "Molho pronto (3 sachês)",
+            "Carne moída (1kg)",
+            "Filé de frango (1,5kg)",
+            "Carne bovina em pedaços (1kg)",
+            "Batata (4kg)",
+            "Cebola (6 unidades)",
+            "Alho (2 cabeças)",
+            "Tomate (10 unidades)",
+            "Cenoura (6 unidades)",
+            "Abobrinha (3 unidades)",
+            "Brócolis (2 maços)",
+            "Couve-flor (2 unidades)",
+            "Abacate (2 unidades)",
+            "Azeite de oliva (500ml)",
+            "Miojo (8 unidades)",
+            "Bolachas (3 pacotes)",
+            "Queijo muçarela (500g)",
+            "Presunto (500g)",
+            "Queijo minas ou branco (400g)",
+            "Castanhas ou sementes (300g)",
+            "Barra de cereal (8 unidades)",
+            "Suco natural (6 unidades)",
+            "Farinha de trigo (2kg)",
+            "Fermento em pó (1 sachê grande)",
+            "Sal (1kg)",
+            "Pimenta-do-reino (frasco pequeno)",
+            "Orégano (frasco)",
+            "Caldo de legumes (6 cubos)"
+        );
+        break;
+
+    case 'mensal':
+        list = [
+            "LISTA DE COMPRAS MENSAL - DICAS:",
+            "1. Planeje todas as refeições do mês",
+            "2. Compre itens não perecíveis em quantidade",
+            "3. Organize por categorias no supermercado",
+            "",
+            "ITENS BÁSICOS:",
+            "Arroz (5kg)",
+            "Feijão (2kg)",
+            "Massas variadas (3kg)",
+            "Óleo (2L)",
+            "Azeite (1L)",
+            "Sal (1kg)",
+            "Açúcar (2kg)",
+            "Farinha de trigo (2kg)",
+            "Café (500g)",
+            "Leite em pó (1kg)",
+            "",
+            "CARNES E PROTEÍNAS:",
+            "Frango (5kg - dividir em porções)",
+            "Carne moída (2kg)",
+            "Peixe (1kg)",
+            "Ovos (30 unidades)",
+            "Queijos variados (2kg)",
+            "",
+            "FRUTAS E VEGETAIS:",
+            "Compre semanalmente para manter frescor",
+            "Congele o que for possível"
+        ];
+        break;
+}
+
+    // Exibe no chat (certifique-se que addBotMessage existe)
+    addBotMessage(`Aqui está sua lista de compras para ${profiles[selectedProfile]}:<br><br>${list.join('<br>')}`);
+}
+
+        function searchCategory(category) {
+            const receitasCategoria = {
+                "Salada": ["Salada Caesar", "Salada Grega", "Salada de Quinoa", "Salada Caprese"],
+                "Carne": ["Filé Mignon", "Frango Assado", "Costela no Bafo", "Peixe Grelhado"],
+                "Massa": ["Espaguete à Carbonara", "Lasanha", "Penne ao Molho Pesto", "Nhoque"],
+                "Pizza": ["Pizza Margherita", "Pizza Calabresa", "Pizza Portuguesa", "Pizza Vegana"],
+                "Asiática": ["Sushi", "Yakissoba", "Pad Thai", "Ramen"],
+                "Vegana": ["Strogonoff de Cogumelos", "Feijoada Vegetariana", "Hambúrguer de Grão-de-Bico", "Ratatouille"],
+                "Fit": ["Frango com Batata Doce", "Omelete de Clara", "Salada de Grãos", "Smoothie Bowl"],
+                "Sopa": ["Sopa de Legumes", "Caldinho de Feijão", "Canja", "Sopa de Abóbora"],
+                "Lanches": ["Hambúrguer Artesanal", "Sanduíche Natural", "Wrap de Frango", "Cachorro-Quente"],
+                "Doces": ["Bolo de Chocolate", "Pudim", "Mousse de Maracujá", "Cheesecake"],
+                "bolo":["Bolo de cenoura", "Bolo de chocolate fofinho", "Bolo de Fubá","Bolo de Milho" ],
+                "Arroz":["Arroz soltinho"],
+                "Feijão": ["Feijão"],
+                "Ovo frito":["Ovo frito"],
+                "Purê de batata":["Purê de batata lisinho"]
+            };
+            
+            addBotMessage(`Receitas de ${category}:<br><br>- ${receitasCategoria[category].join('<br>- ')}<br><br>Digite o nome de uma receita para ver os detalhes!`);
+        }
+
+        function searchRecipe() {
+            const query = document.getElementById('recipe-search').value.trim();
+            if (query) {
+                addUserMessage(query);
+                
+                // Simula busca
+                setTimeout(() => {
+                    const lowerQuery = query.toLowerCase();
+                    let found = false;
+                    
+                    // Procura em todas as receitas
+                    for (const [key, receita] of Object.entries(receitas)) {
+                        if (lowerQuery.includes(key.toLowerCase())) {
+                            addBotMessage(`<strong>${receita.title}</strong><br><br>${receita.content}`);
+                            found = true;
+                            return;
+                        }
+                    }
+                    
+                    if (!found) {
+                        addBotMessage(`Não encontrei uma receita exata para "${query}". Você quis dizer:<br><br>- Bolo de cenoura<br>- Suco detox<br>- ${query} vegano<br><br>Tente ser mais específico ou selecione uma categoria acima.`);
+                    }
+                }, 800);
+            }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                if (e.target.id === 'recipe-search') {
+                    searchRecipe();
+                } else if (e.target.id === 'user-input') {
+                    sendMessage();
+                }
+            }
+        }
+
+        // Funções do chat
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Resposta simulada
+                setTimeout(() => {
+                    respondToMessage(message);
+                }, 1000);
+            }
+        }
+
+        function addUserMessage(text) {
+            const chat = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message fade-in';
+            messageDiv.innerHTML = text;
+            chat.appendChild(messageDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addBotMessage(text) {
+            const chat = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message fade-in';
+            messageDiv.innerHTML = text;
+            chat.appendChild(messageDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+function respondToMessage(message) {
+    const lowerMsg = message.toLowerCase();
+
+    // Tenta encontrar uma receita correspondente
+    for (const [key, receita] of Object.entries(receitas)) {
+        if (lowerMsg.includes(key.toLowerCase())) {
+            addBotMessage(`<strong>${receita.title}</strong><br>${receita.content}`);
+            return;
+        }
+    }
+
+    // Respostas para ingredientes genéricos
+    const ingredientResponses = {
+        "carne": ["Carne Assada", "Carne Moída Refogada", "Carne de Panela", "Filé Mignon", "Bife à Milanesa"],
+        "frango": ["Frango Assado", "Estrogonofe de Frango", "Frango à Parmegiana", "Frango Xadrez", "Frango Empanado na Airfryer"],
+        "peixe": ["Filé de Peixe Empanado", "Moqueca de Peixe", "Salmão Grelhado", "Camarão ao Alho e Óleo", "Bolinho de Bacalhau"],
+        "salada": ["Salada Caesar", "Salada Grega", "Salada de Quinoa", "Salada Tropical", "Salada Caprese"],
+        "macarrão": ["Macarrão à Bolonhesa", "Macarrão Alho e Óleo", "Macarrão com Queijo", "Macarrão de Forno", "Macarrão com Legumes"],
+        "pizza": ["Pizza Margherita", "Pizza Calabresa", "Pizza Portuguesa", "Pizza Vegana"],
+        "doce": ["Pudim", "Bolo de Chocolate", "Mousse de Maracujá", "Brigadeiro", "Torta de Limão"],
+        "vegano": ["Hambúrguer de Grão-de-Bico", "Lasanha de Berinjela", "Estrogonofe de Soja", "Feijoada Vegana", "Ratatouille"],
+        "lanche":[ "hambúrguer artesanal", "sanduíche natural", "wrap de frango", "cachorro-quente"],
+        "bolo":["bolo de cenoura", "bolo de chocolate", "bolo de fubá", "bolo de milho", "cupcakes"],
+        "bebidas":["suco detox",  "suco de melancia",  "suco de abacaxi com gengibre", "vitamina de banana", "smoothie de morango"],      
+         "drinks" :["caipirinha", "mojito", "pina colada",  "aperol spritz",  "drink refrescante sem álcool"],                                                           
+         "restriçõs alimentares":["bolo sem glúten e lactose", "leite vegetal caseiro",  "pão sem glúten", "panqueca sem ovo"]
+    };
+
+    for (const [ingredient, recipes] of Object.entries(ingredientResponses)) {
+        if (lowerMsg.includes(ingredient)) {
+            addBotMessage(`Aqui estão algumas receitas com ${ingredient}:<br><br>- ${recipes.join('<br>- ')}<br><br>Digite o nome completo de uma receita para ver os detalhes!`);
+            return;
+        }
+    }
+
+    // Frases genéricas de receita
+    if (lowerMsg.includes('receita') || lowerMsg.includes('Me de uma receita de')('como fazer')) {
+        addBotMessage("Tenho receitas de diversos tipos: carnes, frango, peixe, legumes, sobremesas, bolos, sucos, drinks, veganas e muito mais!<br>" +
+            "Por exemplo, diga: <em>'me mostre a receita de estrogonofe'</em> ou <em>'como fazer arroz de forno'</em>.");
+    }
+    // Cardápios
+    else if (lowerMsg.includes('cardápio') || lowerMsg.includes('menu')) {
+        addBotMessage("Você pode ver sugestões de cardápios como: jantar romântico, ceia de natal, festa junina ou almoço de domingo.<br>" +
+            "Diga por exemplo: <em>'me mostre o cardápio de um jantar romântico'</em>.");
+    }
+    // Lista de compras
+    else if (lowerMsg.includes('lista de compras') || lowerMsg.includes('compras')) {
+        addBotMessage("Para gerar uma lista de compras, selecione um cardápio acima e clique no botão 'Gerar Lista de Compras'.<br>" +
+            "Você também pode escolher o perfil (solteiro, casal, família) para ajustar as quantidades.");
+    }
+    // Dicas
+    else if (lowerMsg.includes('dica') || lowerMsg.includes('truque')) {
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        addBotMessage("<strong>Dica do Chef:</strong> " + randomTip);
+    }
+    // Fallback
+        addBotMessage(responses[Math.floor(Math.random() * responses.length)]);
+    };
+ 
+           
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Define uma dica aleatória ao carregar
+            document.getElementById('daily-tip').textContent = tips[Math.floor(Math.random() * tips.length)];
+            
+            // Mostra o menu de segunda por padrão
+            showMenu('segunda');
+        });
+    </script>
+</body>
+</html>
