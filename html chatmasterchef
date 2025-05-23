@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="stylesheet" href="chatmasterchef.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatMasterchef - Seu Assistente Culinário com IA</title>
+</head>
+    <body>
+    <header>
+        <div class="container">
+            <h1>
+                <span>🍳</span>
+      ChatMasterChef
+            </h1>
+            <p>Seu assistente culinário com IA. 
+                
+Receitas, cardápios semanais e listas de compras personalizadas</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <h3><span>✅</span> Receitas</h3>
+                <p>Doces, salgadas, veganas, low-carb, sem lactose e muito mais para todas as ocasiões.</p>
+            </div>
+            <div class="feature-card">
+                <h3><span>✅</span> Bebidas</h3>
+                <p>Sucos naturais, drinks, coquetéis, cafés especiais e bebidas saudáveis.</p>
+            </div>
+            <div class="feature-card">
+                <h3><span>✅</span> Cardápios</h3>
+                <p>Sugestões de menu para cada dia da semana com lista de compras integrada.</p>
+            </div>
+        </div>
+        
+        <h2>📅 Sugestões de Cardápio por Dia</h2>
+        <div class="menu-days">
+            <div class="day-card" onclick="showMenu('segunda')">Segunda</div>
+            <div class="day-card" onclick="showMenu('terca')">Terça</div>
+            <div class="day-card" onclick="showMenu('quarta')">Quarta</div>
+            <div class="day-card" onclick="showMenu('quinta')">Quinta</div>
+            <div class="day-card" onclick="showMenu('sexta')">Sexta</div>
+            <div class="day-card" onclick="showMenu('sabado')">Sábado</div>
+            <div class="day-card" onclick="showMenu('domingo')">Domingo</div>
+        </div>
+        
+        <div id="menu-display" class="feature-card fade-in">
+            <h3 id="menu-title"><span>🍽️</span> Cardápio de Segunda-feira</h3>
+            <div id="menu-content">
+                <p><strong>Café da Manhã:</strong> Vitamina de banana com aveia e mel</p>
+                <p><strong>Almoço:</strong> Filé de frango grelhado com arroz integral e brócolis no vapor</p>
+                <p><strong>Lanche:</strong> Iogurte natural com granola e frutas vermelhas</p>
+                <p><strong>Jantar:</strong> Omelete de espinafre com queijo branco e salada verde</p>
+                <button onclick="generateShoppingList()" style="margin-top: 15px; padding: 10px 20px; background: var(--success); color: white; border: none; border-radius: 5px; cursor: pointer;">Gerar Lista de Compras para essa receita</button>
+            </div>
+        </div>
+        <h2>🛒 Listas de Compras Automáticas</h2>
+    <button class="shopping-list-btn" onclick="selectProfile('solteiro', event)">Lista Solteiro</button>
+<button class="shopping-list-btn" onclick="selectProfile('casal', event)">Lista Casal(2 pessoas)</button>
+<button class="shopping-list-btn" onclick="selectProfile('familia', event)">Lista Família (4 pessoas)</button>
+<button class="shopping-list-btn" onclick="selectProfile('mensal', event)">Lista Mensal  (Economize + tempo)</button>
+
+        
+        <h2>🍽️ Categorias de Receitas</h2>
+        <div class="recipe-categories">
+            <div class="category-card" onclick="searchCategory('Saladas')">🥗 Saladas</div>
+            <div class="category-card" onclick="searchCategory('Carnes')">🍗 Carnes</div>
+            <div class="category-card" onclick="searchCategory('Massas')">🍝 Massas</div>
+            <div class="category-card" onclick="searchCategory('Pizzas')">🍕 Pizzas</div>
+            <div class="category-card" onclick="searchCategory('Asiáticas')">🍣 Asiáticas</div>
+            <div class="category-card" onclick="searchCategory('Veganas')">🥑 Veganas</div>
+            <div class="category-card" onclick="searchCategory('Fit')">🍛 Fit</div>
+            <div class="category-card" onclick="searchCategory('Sopas')">🍜 Sopas</div>
+            <div class="category-card" onclick="searchCategory('Lanches')">🍔 Lanches</div>
+            <div class="category-card" onclick="searchCategory('Doces')">🍰 Doces</div>
+        </div>
+        
+        <h2>🔍 Busca Rápida</h2>
+        <div class="search-box">
+            <input type="text" id="recipe-search" placeholder="Digite o que procura, ex: 'bolo de cenoura vegano', 'suco detox'..." onkeypress="handleKeyPress(event)">
+            <button onclick="searchRecipe()">Pesquisar</button>
+        </div>
+        
+        <div class="tip-card">
+            <h3><span>💡</span> Dica do Dia</h3>
+            <p id="daily-tip">Para deixar o arroz soltinho, refogue o alho e o arroz no óleo antes de colocar água quente. Use 2 xícaras de água para 1 de arroz e tampe a panela sem mexer!</p>
+        </div>
+        
+        <div class="chat-container">
+            <h2>🍳 Chat MasterChef IA</h2>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message fade-in">
+                    Olá! Sou o ChatMasterChef IA. Como posso te ajudar hoje? 😊<br><br>
+                    Posso sugerir receitas, cardápios semanais, listas de compras e dar dicas culinárias!
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Digite sua dúvida, ex: 'Receitas de carne'..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 ChatMasterChef IA - Todos os direitos reservados</p>
+            <p>Desenvolvido com ❤️ para amantes da culinária</p>
+        </div>
+    </footer>
+         <script src="chatmasterchef1.1.js"></script>
+    </body>
+</html>
